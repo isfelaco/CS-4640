@@ -1,0 +1,109 @@
+/* 
+Create a class that will serve as a container for your elements, set margin, padding, and width.
+Apply the container class throughout your HTML to each of these sections: <header>, <footer>, <section>.
+Add vertical space between elements; for example, set bottom margin to 22 pixels.
+Add padding to the sections. You may want to try adjusting the padding to find the numbers that work for your ideal design.
+Set the copyright footer to float left: create a copyright class and set the float property to be left. Add the copyright class to the <small> tag.
+Create a primary-footer class to further specify the look-and-feel of the footer and set top and bottom padding. Then, add the class to the <footer>.
+*/
+html {
+  height: 100%;
+}
+body {
+  background-color: lightblue;
+  display: flex;
+  flex-direction: column;
+  height: calc(100% - 24px);
+  margin: 12px;
+  padding: 0;
+  gap: 20px;
+  font-family: "Trebuchet MS", "Lucida Sans Unicode", "Lucida Grande",
+    "Lucida Sans", Arial, sans-serif;
+}
+
+h1,
+h2 {
+  padding: 0;
+  margin: 0;
+  word-break: break-all;
+}
+
+nav {
+  border: 3px solid blue;
+  border-radius: 12px;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  text-align: center;
+}
+
+nav a {
+  flex: 1 0 5px;
+  align-self: center;
+  text-decoration: none;
+}
+
+nav a:hover {
+  font-weight: bold;
+}
+
+.container {
+  border: 2px solid gray;
+  border-radius: 12px;
+  padding: 12px;
+
+  display: flex;
+  flex-direction: column;
+  flex-wrap: wrap;
+  gap: 12px;
+  text-align: center;
+  justify-content: center;
+}
+
+.container .subsection {
+  border: 1px solid blue;
+  border-radius: 12px;
+}
+
+.container .subsection:hover {
+  border: 1px solid lightskyblue;
+}
+
+#highlights {
+  flex-direction: row;
+  height: 100%;
+}
+
+#highlights.container .subsection {
+  flex: 1 0 300px;
+}
+
+@media screen and (max-width: 768px) {
+  #highlights.container .subsection {
+    flex-basis: 100%;
+  }
+}
+
+img {
+  width: 50%;
+  align-self: center;
+  margin-top: 12px;
+}
+
+.primary-footer {
+  border: 3px solid gray;
+  border-radius: 12px;
+  padding: 12px;
+
+  display: flex;
+  flex-direction: column;
+  flex-wrap: wrap;
+  justify-content: center;
+
+  margin-top: auto;
+}
+
+.primary-footer.copyright {
+  float: left;
+}
