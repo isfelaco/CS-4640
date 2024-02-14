@@ -7,7 +7,7 @@ Set the copyright footer to float left: create a copyright class and set the flo
 Create a primary-footer class to further specify the look-and-feel of the footer and set top and bottom padding. Then, add the class to the <footer>.
 */
 html {
-  height: 100%;
+  height: 100vh;
 }
 body {
   background-color: lightblue;
@@ -56,7 +56,6 @@ nav a:hover {
   display: flex;
   flex-direction: column;
   flex-wrap: wrap;
-  gap: 12px;
   text-align: center;
   justify-content: center;
 }
@@ -73,6 +72,7 @@ nav a:hover {
 #highlights {
   flex-direction: row;
   height: 100%;
+  gap: 12px;
 }
 
 #highlights.container .subsection {
@@ -86,7 +86,8 @@ nav a:hover {
 }
 
 img {
-  width: 50%;
+  height: 100px;
+  width: auto;
   align-self: center;
   margin-top: 12px;
 }
