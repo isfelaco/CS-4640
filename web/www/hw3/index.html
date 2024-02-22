@@ -1,0 +1,277 @@
+<!-- Bootstrap elements
+  1. nav bar
+  2. pagination
+  3. card with image
+  4. thumbnail image
+  5. accordion
+  6. modal
+-->
+
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <!-- meta tags -->
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <meta name="author" content="Bella Felaco" />
+    <meta name="description" content="Bella Felaco's website" />
+    <meta name="keywords" content="Isabella Bella Felaco UVA" />
+
+    <meta name="og:title" content="Bella Felaco's Website: Home" />
+    <meta name="og:type" content="website" />
+    <meta name="og:image" content="images/icon.png" />
+    <meta
+      name="og:url"
+      content="https://cs4640.cs.virginia.edu/isf4rjk/hw2/index.html"
+    />
+    <meta name="og:description" content="Bella Felaco's personal website" />
+    <meta name="og:site_name" content="Bella Felaco's Website" />
+
+    <!-- title -->
+    <title>Bella Felaco Website: Home</title>
+
+    <!-- styles -->
+    <link
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css"
+      rel="stylesheet"
+      integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN"
+      crossorigin="anonymous"
+    />
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap"></script>
+
+    <link rel="stylesheet/less" type="text/css" href="styles/custom.less" />
+    <script src="https://cdn.jsdelivr.net/npm/less"></script>
+
+    <link rel="stylesheet" href="styles/main.css" />
+  </head>
+
+  <body>
+    <nav class="navbar navbar-expand-lg bg-body-tertiary">
+      <div class="container-fluid">
+        <a class="navbar-brand" href="#">Bella Felaco's Web Page</a>
+        <button
+          class="navbar-toggler"
+          type="button"
+          data-bs-toggle="collapse"
+          data-bs-target="#navbarSupportedContent"
+          aria-controls="navbarSupportedContent"
+          aria-expanded="false"
+          aria-label="Toggle navigation"
+        >
+          <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarSupportedContent">
+          <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+            <li class="nav-item">
+              <a class="nav-link active" aria-current="page" href="#">Home</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="courses.html">Course Work</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="projects.html">Projects</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="work.html">Work</a>
+            </li>
+          </ul>
+        </div>
+      </div>
+    </nav>
+
+    <section class="container">
+      <h2>Welcome to My Site!</h2>
+      <p>
+        This is my personal website, which includes information about me and my
+        experience.
+      </p>
+      <img src="images/rotunda.jpg" alt="UVA Rotunda" class="img-thumbnail" />
+      <!-- modal button-->
+      <button
+        type="button"
+        class="btn btn-primary"
+        data-bs-toggle="modal"
+        data-bs-target="#myModal"
+      >
+        Contact Me
+      </button>
+    </section>
+
+    <!-- modal -->
+    <div class="modal" tabindex="-1" id="myModal">
+      <div class="modal-dialog">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title">Contact Me</h5>
+            <button
+              type="button"
+              class="btn-close"
+              data-bs-dismiss="modal"
+              aria-label="Close"
+            ></button>
+          </div>
+          <div class="modal-body">
+            <p>Contact Info</p>
+          </div>
+          <div class="modal-footer">
+            <button
+              type="button"
+              class="btn btn-secondary"
+              data-bs-dismiss="modal"
+            >
+              Close
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- highlights -->
+    <section class="container" id="highlights">
+      <div class="accordion" id="accordionExample">
+        <div class="accordion-item">
+          <h2 class="accordion-header">
+            <button
+              class="accordion-button"
+              type="button"
+              data-bs-toggle="collapse"
+              data-bs-target="#collapseOne"
+              aria-expanded="true"
+              aria-controls="collapseOne"
+            >
+              Course Work
+            </button>
+          </h2>
+          <div
+            id="collapseOne"
+            class="accordion-collapse collapse show"
+            data-bs-parent="#accordionExample"
+          >
+            <div class="accordion-body">
+              <div class="card" style="width: 18rem">
+                <img
+                  src="images/textbooks.png"
+                  alt="image of textbooks"
+                  class="card-img-top"
+                />
+                <div class="card-body">
+                  <h5 class="card-title">Course Work</h5>
+                  <p class="card-text">
+                    I've taken many courses as a Computer Science major
+                  </p>
+                  <a href="courses.html" class="btn btn-primary"
+                    >View more about my course work</a
+                  >
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="accordion-item">
+          <h2 class="accordion-header">
+            <button
+              class="accordion-button collapsed"
+              type="button"
+              data-bs-toggle="collapse"
+              data-bs-target="#collapseTwo"
+              aria-expanded="false"
+              aria-controls="collapseTwo"
+            >
+              Projects
+            </button>
+          </h2>
+          <div
+            id="collapseTwo"
+            class="accordion-collapse collapse"
+            data-bs-parent="#accordionExample"
+          >
+            <div class="accordion-body">
+              <div class="card" style="width: 18rem">
+                <img
+                  src="images/project.png"
+                  alt="image of textbooks"
+                  class="card-img-top"
+                />
+                <div class="card-body">
+                  <h5 class="card-title">Projects</h5>
+                  <p class="card-text">
+                    I've developed several web applications as a software
+                    developer
+                  </p>
+                  <a href="projects.html" class="btn btn-primary"
+                    >View more about my projects</a
+                  >
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="accordion-item">
+          <h2 class="accordion-header">
+            <button
+              class="accordion-button collapsed"
+              type="button"
+              data-bs-toggle="collapse"
+              data-bs-target="#collapseThree"
+              aria-expanded="false"
+              aria-controls="collapseThree"
+            >
+              Work Experience
+            </button>
+          </h2>
+          <div
+            id="collapseThree"
+            class="accordion-collapse collapse"
+            data-bs-parent="#accordionExample"
+          >
+            <div class="accordion-body">
+              <div class="card" style="width: 18rem">
+                <img
+                  src="images/work.png"
+                  alt="image of work example"
+                  class="card-img-top"
+                />
+                <div class="card-body">
+                  <h5 class="card-title">Work Experience</h5>
+                  <p class="card-text">
+                    I've worked as a Software Engineer Intern
+                  </p>
+                  <a href="work.html" class="btn btn-primary"
+                    >View more about my work experience</a
+                  >
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <footer class="primary-footer">
+      <small class="copyright">copyright info</small>
+      <nav aria-label="Page navigation example">
+        <ul class="pagination">
+          <li class="page-item" id="previousPage">
+            <a class="page-link" href="#">Previous</a>
+          </li>
+
+          <li class="page-item">
+            <a class="page-link" href="contact.html">1</a>
+          </li>
+          <li class="page-item">
+            <a class="page-link" href="courses.html">2</a>
+          </li>
+          <li class="page-item">
+            <a class="page-link" href="projects.html">3</a>
+          </li>
+          <li class="page-item"><a class="page-link" href="work.html">4</a></li>
+          <li class="page-item" id="nextPage">
+            <a class="page-link" href="#">Next</a>
+          </li>
+        </ul>
+      </nav>
+    </footer>
+  </body>
+</html>

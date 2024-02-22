@@ -1,0 +1,28 @@
+html {
+  height: 100vh;
+}
+body {
+  display: flex;
+  flex-direction: column;
+  height: calc(100% - 24px);
+  margin: 12px;
+  padding: 0;
+  gap: 20px;
+}
+
+h1,
+h2 {
+  padding: 0;
+  margin: 0;
+  word-break: break-all;
+}
+
+#highlights {
+  height: 100%;
+}
+
+img {
+  height: 100px;
+  width: auto;
+  align-self: center;
+}

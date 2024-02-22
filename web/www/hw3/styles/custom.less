@@ -1,0 +1,67 @@
+// define a variable
+@primary-color: gray;
+@secondary-color: blue;
+
+// define a mixin
+.custom-border(@color) {
+  border: 1px solid @color;
+  border-radius: 12px;
+}
+
+// override Bootstrap styles
+.navbar {
+  // mixin
+  .custom-border(@primary-color);
+}
+
+// nesting
+.container {
+  // mixin
+  .custom-border(@primary-color);
+  padding: 12px;
+
+  display: flex;
+  flex-direction: column;
+  flex-wrap: wrap;
+  text-align: center;
+  justify-content: center;
+
+  .card {
+    // mixin
+    .custom-border(@secondary-color);
+    display: flex;
+    flex: 100%;
+
+    img {
+      height: 100px;
+      width: auto;
+    }
+  }
+
+  .card:hover {
+    border: 1px solid lightskyblue;
+  }
+}
+
+.accordion-body {
+  display: flex;
+  justify-content: center;
+}
+
+// nesting
+.primary-footer {
+  // mixin
+  .custom-border(@primary-color);
+  padding: 12px;
+
+  display: flex;
+  flex-direction: column;
+  flex-wrap: wrap;
+  justify-content: center;
+
+  margin-top: auto;
+
+  .copyright {
+    float: left;
+  }
+}
