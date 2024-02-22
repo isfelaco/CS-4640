@@ -1,0 +1,67 @@
+@primary-color: #cff4fc;
+@secondary-color: lightgray;
+@tertiary-color: gray;
+
+.border() {
+  border: 1px solid black;
+  border-radius: 20px;
+}
+
+.text-outline(@color, @thickness: 1px) {
+  text-shadow: -@thickness -@thickness 0 @color, @thickness -@thickness 0 @color,
+    -@thickness @thickness 0 @color, @thickness @thickness 0 @color;
+}
+
+html {
+  height: 100vh;
+}
+
+body {
+  display: flex;
+  flex-direction: column;
+  height: 100vh;
+  padding: 10px;
+
+  border: 10px solid @primary-color;
+}
+
+h1 {
+  color: @primary-color;
+  align-self: center;
+  .text-outline(@tertiary-color, 1.5px);
+}
+
+.container {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+
+  background-color: @secondary-color;
+  .border();
+  padding: 12px;
+
+  overflow: auto;
+}
+
+[aria-label="apartments"] {
+  overflow: auto;
+}
+
+.list-group-item-action:nth-child(even) {
+  background-color: @primary-color;
+
+  .list-group-flush * {
+    background-color: @primary-color;
+  }
+}
+
+[aria-label="pagination"] {
+  align-self: center;
+  * {
+    color: black;
+  }
+}
+
+.navbar {
+  border: 10px solid @primary-color;
+}
