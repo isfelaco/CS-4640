@@ -1,12 +1,15 @@
+/* site colors */
 @primary-color: #cff4fc;
 @secondary-color: lightgray;
 @tertiary-color: gray;
 
+/* custom border mixin*/
 .border() {
   border: 1px solid black;
   border-radius: 20px;
 }
 
+/* custom outline mixin */
 .text-outline(@color, @thickness: 1px) {
   text-shadow: -@thickness -@thickness 0 @color, @thickness -@thickness 0 @color,
     -@thickness @thickness 0 @color, @thickness @thickness 0 @color;
@@ -20,7 +23,8 @@ body {
   display: flex;
   flex-direction: column;
   height: 100vh;
-  padding: 10px;
+  padding: 20px;
+  gap: 20px;
 
   border: 10px solid @primary-color;
 }
@@ -31,10 +35,12 @@ h1 {
   .text-outline(@tertiary-color, 1.5px);
 }
 
+/* base container */
 .container {
   display: flex;
   flex-direction: column;
   gap: 12px;
+  height: 100%;
 
   background-color: @secondary-color;
   .border();
@@ -47,6 +53,7 @@ h1 {
   overflow: auto;
 }
 
+/* alternating list colors */
 .list-group-item-action:nth-child(even) {
   background-color: @primary-color;
 
@@ -55,6 +62,7 @@ h1 {
   }
 }
 
+/* editing Bootstrap pagination style */
 [aria-label="pagination"] {
   align-self: center;
   * {
@@ -62,6 +70,7 @@ h1 {
   }
 }
 
+/* editing Bootstrap navbar style */
 .navbar {
   border: 10px solid @primary-color;
 }

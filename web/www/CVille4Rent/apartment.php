@@ -27,8 +27,10 @@
 
     <link rel="stylesheet/less" type="text/css" href="styles/main.less" />
     <script src="https://cdn.jsdelivr.net/npm/less"></script>
-
-    <!-- <link rel="stylesheet" href="styles/main.css" /> -->
   </head>
-  <body></body>
+  <body>
+    <?php include 'components/navbar.php'; ?>
+
+    
+  </body>
 </html>
