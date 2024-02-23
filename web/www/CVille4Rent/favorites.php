@@ -31,21 +31,19 @@
     </head>
     <body>
         <?php include 'components/navbar.php'; ?>
-        <?php include 'data/getApartments.php'; ?>
+        <?php include 'data/generateLists.php'; ?>
 
         <h1>Favorite Apartments</h1>
 
-        <div class="container">
+        <div class="base-container">
             <i>Click an apartment to view more information</i>
 
             <!-- listing of all favorite apartments - will filter by apartments favorite by user -->
-            <div class="list-group" aria-label="apartments">
-                <?php
-                    $jsonString = file_get_contents('data/apartments.json');
-                    $apartments = json_decode($jsonString, true);
-                    echo generateApartmentList($apartments);
-                ?>
-            </div>
+            <?php
+                $jsonString = file_get_contents('data/apartments.json');
+                $apartments = json_decode($jsonString, true);
+                echo generateApartmentList($apartments);
+            ?>
         </div>
     </body>
 </html>

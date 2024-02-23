@@ -33,22 +33,23 @@
 
     <h1>Profile</h1>
 
-    <div class="container">
+    <div class="base-container">
+        <!-- user email address -->
         <div class="col-md-4">
             <label for="email-address" class="form-label">Email Address</h4>
             <div class="input-group mb-3">
                 <input id="email-address" type="text" class="form-control editable-input" placeholder="User" disabled>
                 <span class="input-group-text">@</span>
                 <input type="text" class="form-control editable-input" placeholder="Server" aria-label="Server" disabled>
-                <button class="btn btn-outline-secondary" type="button" onclick="toggleInput()">Edit</button>
             </div>
-            
-
         </div>
+
+        <!-- user password -->
         <div class="col-md-4">
             <label for="password" class="form-label">Password</h4>
             <input id="password" type="text" class="form-control editable-input" placeholder="Password" disabled>
         </div>
+
         <button id="edit-button" class="btn btn-info" type="button" onclick="toggleInput()">Edit Profile</button>
 
         <a role="button" href="favorites.php" class="btn btn-light">View Favorite Apartments</a>
@@ -56,6 +57,7 @@
     </div>
 
     <script>
+        /* function to toggle the edit button + disable/enable inputs */
         function toggleInput() {
             var inputs = document.querySelectorAll('.editable-input');
             inputs.forEach(function(input) {

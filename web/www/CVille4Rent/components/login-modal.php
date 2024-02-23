@@ -12,16 +12,21 @@
         </div>
         <div class="modal-body">
           <form class="row g-3 needs-validation" novalidate>
+            <!-- email address input -->
             <div class="col-md-4">
-              <label for="email-address" class="form-label">Username</label>
+              <label for="email-address" class="form-label">Email Address</label>
               <input type="text" class="form-control" id="email-address" required>
+              <!-- validation to be added later -->
               <div class="invalid-feedback">
                 No user associated with this email address
               </div>
             </div>
+
+            <!-- password input -->
             <div class="col-md-4">
               <label for="password" class="form-label">Password</label>
               <input type="text" class="form-control" id="password" required>
+              <!-- validation to be added later -->
               <div class="invalid-feedback">
                 Incorrect Password
               </div>
@@ -29,7 +34,8 @@
           </form>
         </div>
 
-        <div class="modal-footer">         
+        <div class="modal-footer">
+          <!-- login button - will submit form and authenticate user -->         
           <button
             class="btn btn-primary" 
             type='submit'

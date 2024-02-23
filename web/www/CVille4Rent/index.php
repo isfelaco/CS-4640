@@ -31,28 +31,21 @@
   </head>
   <body>
     <?php include 'components/navbar.php'; ?>
-    <?php include 'data/getApartments.php'; ?>
+    <?php include 'data/generateLists.php'; ?>
 
     <h1>CVille 4 Rent</h1>
-    <div class="container">
+    <div class="base-container">
       <!-- instructions and search bar -->
       <span>
         <i>Click an apartment to view more information or Search by name</i>
-        <div class="input-group mb-3">
-          <span class="input-group-text" id="inputGroup-sizing-default">
-            Search
-          </span>
-          <input
-            type="text"
-            class="form-control"
-            aria-label="Sizing example input"
-            aria-describedby="inputGroup-sizing-default"
-          />
-        </div>
+        <form class="d-flex" role="search">
+          <input class="form-control me-2" type="search" placeholder="Search" aria-label="Search">
+          <button class="btn btn-secondary" type="submit">Search</button>
+        </form>
       </span>
 
       <!-- listing of apartments -->
-      <div class="list-group" aria-label="apartments">
+      <div class="list-group" aria-label="list">
         <?php
           $jsonString = file_get_contents('data/apartments.json');
           $apartments = json_decode($jsonString, true);

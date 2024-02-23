@@ -2,21 +2,21 @@
   {
     "name": "Apartment 1",
     "address": "Address 1",
-    "rent": "$",
+    "rent": 1000,
     "bedrooms": 1,
     "bathrooms": 1
   },
   {
     "name": "Apartment 2",
     "address": "Address 2",
-    "rent": "$",
+    "rent": 1000,
     "bedrooms": 1,
     "bathrooms": 1
   },
   {
     "name": "Apartment 3",
     "address": "Address 3",
-    "rent": "$",
+    "rent": 1000,
     "bedrooms": 1,
     "bathrooms": 1
   }

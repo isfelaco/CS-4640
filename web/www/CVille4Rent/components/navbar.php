@@ -1,5 +1,5 @@
 <!-- Bootstrap navbar with links to login/profile -->
-<nav class="navbar navbar-expand-lg bg-body-tertiary">
+<nav class="navbar" >
   <div class="container-fluid">
     <a class="navbar-brand" href="index.php">CVille 4 Rent</a>
     <button
