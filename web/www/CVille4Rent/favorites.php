@@ -39,11 +39,13 @@
             <i>Click an apartment to view more information</i>
 
             <!-- listing of all favorite apartments - will filter by apartments favorite by user -->
-            <?php
-                $jsonString = file_get_contents('data/apartments.json');
-                $apartments = json_decode($jsonString, true);
-                echo generateApartmentList($apartments);
-            ?>
+            <div class="list-group" aria-label="list">
+                <?php
+                    $jsonString = file_get_contents('data/apartments.json');
+                    $apartments = json_decode($jsonString, true);
+                    echo generateApartmentList($apartments);
+                ?>
+            </div>
         </div>
     </body>
 </html>
