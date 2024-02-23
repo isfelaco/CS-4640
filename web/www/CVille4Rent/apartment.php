@@ -42,14 +42,14 @@
           $apartments = json_decode($jsonString, true);
           foreach ($apartments as $apartment) {
               if ($apartment['name'] == $_GET['name']) {
-                  $html = '<a href="apartment.php?name=' . $apartment['name'] . '" class="list-group-item list-group-item-action">';
+                  $html = '<div class="list-group-item">';
                   $html .= '<ul class="list-group list-group-flush">';
                   $html .= '<li class="list-group-item"><b>Address:</b> ' . $apartment['address'] . '</li>';
                   $html .= '<li class="list-group-item"><b>Rent:</b> ' . $apartment['rent'] . '</li>';
                   $html .= '<li class="list-group-item"><b>Bedrooms:</b> ' . $apartment['bedrooms'] . '</li>';
                   $html .= '<li class="list-group-item"><b>Bathrooms:</b> ' . $apartment['bathrooms'] . '</li>';
                   $html .= '</ul>';
-                  $html .= '</a>';
+                  $html .= '</div>';
                   break;
               }
           }
@@ -65,7 +65,7 @@
             $ratings = json_decode($jsonString, true);
             foreach ($ratings as $rating) {
               if ($rating['apartment']['name'] == $_GET['name']) {
-                  $html = '<a href="apartment.php?name=' . $rating['apartment']['name'] . '" class="list-group-item list-group-item-action">';
+                  $html = '<div class="list-group-item">';
                   $html .= '<h4>' . $rating['title'] . '</h4>';
                   $html .= '<ul class="list-group list-group-flush">';
                   $html .= '<li class="list-group-item"><b>Apartment Name:</b> ' . $rating['apartment']['name'] . '</li>';
@@ -73,7 +73,7 @@
                   $html .= '<li class="list-group-item"><b>Rating:</b> ' . $rating['rating'] . '</li>';
                   $html .= '<li class="list-group-item"><b>Comment:</b> ' . $rating['comment'] . '</li>';
                   $html .= '</ul>';
-                  $html .= '</a>';
+                  $html .= '</div>';
                   break;
               }
             } 
