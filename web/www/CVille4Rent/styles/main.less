@@ -30,6 +30,17 @@ h1 {
   color: @primary-color;
   align-self: center;
   .text-outline(@tertiary-color, 1.5px);
+
+  @keyframes growSpace {
+    0% {
+      letter-spacing: 0px;
+    }
+    100% {
+      letter-spacing: 3px;
+    }
+  }
+  letter-spacing: 3px;
+  animation: growSpace 2s;
 }
 
 /* base container */
@@ -109,13 +120,23 @@ section {
   border: none;
 }
 
-/* alternating list colors */
-.list-group-item-action:nth-child(even) {
+/* customizing the Bootstrap list group item style */
+.list-group-item-action {
   border: none;
-  background-color: @primary-color;
 
-  .list-group-flush * {
+  &:hover {
+    border: 1.5px solid @tertiary-color;
+    h4 {
+      font-weight: bold;
+    }
+  }
+
+  /* alternating list colors */
+  &:nth-child(even) {
     background-color: @primary-color;
+    .list-group-flush * {
+      background-color: @primary-color;
+    }
   }
 }
 
