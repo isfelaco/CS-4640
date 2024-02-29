@@ -1,0 +1,41 @@
+[
+  {
+    "title": "Rating 1",
+    "apartment": {
+      "name": "Apartment 1",
+      "address": "Address 1",
+      "rent": "$",
+      "bedrooms": 1,
+      "bathrooms": 1
+    },
+    "rating": 1,
+    "rentPaid": 1000,
+    "comment": "Comment 1"
+  },
+  {
+    "title": "Rating 2",
+    "apartment": {
+      "name": "Apartment 2",
+      "address": "Address 2",
+      "rent": "$",
+      "bedrooms": 1,
+      "bathrooms": 1
+    },
+    "rating": 2,
+    "rentPaid": 1000,
+    "comment": "Comment 2"
+  },
+  {
+    "title": "Rating 1",
+    "apartment": {
+      "name": "Apartment 3",
+      "address": "Address 3",
+      "rent": "$",
+      "bedrooms": 1,
+      "bathrooms": 1
+    },
+    "rating": 3,
+    "rentPaid": 1000,
+    "comment": "Comment 3"
+  }
+]
