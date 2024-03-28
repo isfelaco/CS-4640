@@ -26,6 +26,20 @@
             </div>
         </div>
 
+        <!-- guesses -->
+        <div class="row">
+            <div class="col-xs-12">
+                Guesses
+                <ul>
+                    <?php foreach ($_SESSION["guesses"] as $guess): ?>
+                        <li>
+                            <?= implode(", ", $guess) ?>
+                        </li>
+                    <?php endforeach; ?>
+                </ul>
+            </div>
+        </div>
+
         <!-- game -->
         <div class="row">
             <div class="col-xs-12">

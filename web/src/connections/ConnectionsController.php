@@ -136,47 +136,49 @@ class ConnectionsController
     }
 
     /**
-     * Check the user's answer to a question.
+     * Check the user's guess.
      */
     public function guess()
     {
         $message = "";
-        // isset($_POST["gameid"]) && is_numeric($_POST["gameid"])
-        if (true) {
-            $game = $this->getGame();
 
-            // guess is currently a list of numbers, need to pass the array of words
-            $guess = explode(" ", trim($_POST["guess"]));
+        $game = $this->getGame();
 
-            // add guess to list of guesses
+        // guess is currently a list of numbers, need to pass the array of words
+        $guess = explode(" ", trim($_POST["guess"]));
+        $guessWords = array_map(function ($index) use ($game) {
+            return $game["words"][$index];
+        }, $guess);
 
-            // for category in $game["categories"]
-            // count the number of words found in the category
-            // if all words are in the list, return correct
-            // else, return incorrect
-            foreach ($game['categories'] as $categoryName) {
-                $wordsFound = 0;
+        // add guess to list of guesses to display
+        $_SESSION["guesses"][] = $guessWords;
 
-                foreach ($guess as $index) {
-                    $word = $game["words"][$index];
-                    if (in_array($word, $this->categories[$categoryName])) {
-                        $wordsFound++;
-                    }
-                }
+        // for category in $game["categories"]
+        // count the number of words found in the category
+        // if all words are in the list, return correct
+        // else, return incorrect
+        foreach ($game['categories'] as $categoryName) {
+            $wordsFound = 0;
 
-                if ($wordsFound === 4) {
-                    $message = "<div class=\"alert alert-success\" role=\"alert\">
-                    Correct! The category is {$categoryName}
-                    </div>";
-                    $this->getGame();
-                    break;
-                } else {
-                    $message = "<div class=\"alert alert-danger\" role=\"alert\">
-                    Incorrect! You guess is off by " . (4 - $wordsFound) . " words.
-                    </div>";
+            foreach ($guessWords as $word) {
+                if (in_array($word, $this->categories[$categoryName])) {
+                    $wordsFound++;
                 }
             }
+
+            if ($wordsFound === 4) {
+                $message = "<div class=\"alert alert-success\" role=\"alert\">
+                    Correct! The category is {$categoryName}
+                    </div>";
+                $this->getGame();
+                break;
+            } else {
+                $message = "<div class=\"alert alert-danger\" role=\"alert\">
+                    Incorrect! You guess is off by " . (4 - $wordsFound) . " words.
+                    </div>";
+            }
         }
+
         $this->showGame($message);
 
     }
