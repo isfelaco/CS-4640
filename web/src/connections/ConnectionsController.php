@@ -40,9 +40,9 @@ class ConnectionsController
             case "guess":
                 $this->guess();
                 break;
-            // case "answer":
-            //     $this->answerQuestion();
-            //     break;
+            case "endGame":
+                $this->showGameOver();
+                break;
             default:
                 $this->showWelcome();
                 break;
@@ -123,7 +123,9 @@ class ConnectionsController
      */
     public function showGame($message = "")
     {
+        // get a new game
         $game = $this->getGame();
+
         include ("/opt/src/connections/templates/game.php");
     }
 
@@ -136,6 +138,61 @@ class ConnectionsController
     }
 
     /**
+     * Show the game over page to the user.
+     */
+    public function showGameOver()
+    {
+        session_destroy();
+        include ("/opt/src/connections/templates/gameOver.php");
+    }
+
+    /**
+     * Validate the user's guess.
+     */
+    public function validateGuess($game, $guess)
+    {
+        $message = "";
+        if (count($guess) === 4) {
+            // check if all elements in the guess array are numeric
+            if (
+                array_reduce($guess, function ($carry, $item) {
+                    return $carry && is_numeric($item);
+                }, true)
+            ) {
+                // check if all indices are within the range of the current list of words
+                $validIndices = array_filter($guess, function ($index) use ($game) {
+                    return isset ($game["words"][$index]);
+                });
+
+                // if the number of valid indices is 4, proceed
+                if (count($validIndices) === 4) {
+                    // map the valid indices to words in the game words
+                    $guessWords = array_map(function ($index) use ($game) {
+                        return $game["words"][$index];
+                    }, $validIndices);
+                    return [$guessWords, $message];
+                } else {
+                    // not all indices are valid
+                    $message = "<div class=\"alert alert-danger\" role=\"alert\">
+                    Invalid indices. Please enter valid numbers.
+                    </div>";
+                }
+            } else {
+                // not all elements in the guess are numeric
+                $message = "<div class=\"alert alert-danger\" role=\"alert\">
+                    Invalid input. Please enter numeric values.
+                    </div>";
+            }
+        } else {
+            // input does not contain exactly 4 numbers
+            $message = "<div class=\"alert alert-danger\" role=\"alert\">
+                    Invalid input length. Please enter exactly 4 numbers.
+                    </div>";
+        }
+        return [false, $message];
+    }
+
+    /**
      * Check the user's guess.
      */
     public function guess()
@@ -144,42 +201,49 @@ class ConnectionsController
 
         $game = $this->getGame();
 
-        // guess is currently a list of numbers, need to pass the array of words
         $guess = explode(" ", trim($_POST["guess"]));
-        $guessWords = array_map(function ($index) use ($game) {
-            return $game["words"][$index];
-        }, $guess);
 
-        // add guess to list of guesses to display
-        $_SESSION["guesses"][] = $guessWords;
+        // check to make sure the input is only 4 numbers
+        // check to make sure the indices are in the current list of words
+        // map the numbers to words in the game words
+        [$guessWords, $message] = $this->validateGuess($game, $guess);
 
-        // for category in $game["categories"]
-        // count the number of words found in the category
-        // if all words are in the list, return correct
-        // else, return incorrect
-        foreach ($game['categories'] as $categoryName) {
-            $wordsFound = 0;
+        if ($guessWords !== false) {
+            // add guess to list of guesses to display
+            $_SESSION["guesses"][] = $guessWords;
 
-            foreach ($guessWords as $word) {
-                if (in_array($word, $this->categories[$categoryName])) {
-                    $wordsFound++;
+            // for category in $game["categories"]
+            // count the number of words found in the category
+            // if all words are in the list, return correct
+            // else, return incorrect
+            $categoryMatched = "";
+            foreach ($game['categories'] as $categoryName) {
+                $wordsFound = 0;
+                foreach ($guessWords as $word) {
+                    if (in_array($word, $this->categories[$categoryName])) {
+                        $wordsFound++;
+                    }
+                }
+
+                if ($wordsFound === 4) {
+                    $categoryMatched = $categoryName;
+                    break;
                 }
             }
 
-            if ($wordsFound === 4) {
+            if ($categoryMatched !== "") {
                 $message = "<div class=\"alert alert-success\" role=\"alert\">
-                    Correct! The category is {$categoryName}
-                    </div>";
-                $this->getGame();
-                break;
+                    Correct! The category is {$categoryMatched}</div>";
+
+                // remove the found words from the list of words
+                $_SESSION['curGame']['words'] = array_diff($_SESSION['curGame']["words"], $guessWords);
             } else {
-                $message = "<div class=\"alert alert-danger\" role=\"alert\">
-                    Incorrect! You guess is off by " . (4 - $wordsFound) . " words.
-                    </div>";
+                $message = "<div class=\"alert alert-danger\" role=\"alert\">Incorrect!";
+                if ($wordsFound > 1)
+                    $message .= " Your guess is off by " . (4 - $wordsFound) . " word(s).";
+                $message .= "</div>";
             }
         }
-
         $this->showGame($message);
-
     }
 }

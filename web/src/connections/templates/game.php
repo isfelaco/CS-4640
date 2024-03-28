@@ -19,6 +19,13 @@
             </div>
         </div>
 
+        <!-- end game button -->
+        <form action="?command=endGame" method="post" class="py-3">
+            <button type="submit"
+                class="btn <?= (count($_SESSION["curGame"]["words"]) !== 0) ? 'btn-danger' : 'btn-success' ?>">End
+                Game</button>
+        </form>
+
         <!-- feedback -->
         <div class="row">
             <div class="col-xs-12">
@@ -26,55 +33,64 @@
             </div>
         </div>
 
-        <!-- guesses -->
-        <div class="row">
-            <div class="col-xs-12">
-                Guesses
-                <ul>
-                    <?php foreach ($_SESSION["guesses"] as $guess): ?>
-                        <li>
-                            <?= implode(", ", $guess) ?>
-                        </li>
-                    <?php endforeach; ?>
-                </ul>
-            </div>
-        </div>
-
         <!-- game -->
-        <div class="row">
-            <div class="col-xs-12">
-                <div class="card">
-                    <div class="card-header">
-                        Game
-                    </div>
-                    <div class="card-body">
-                        <h5 class="card-title">
-                            <?php
-                            foreach ($game["words"] as $index => $word):
-                                echo $index;
-                                ?>
-                                <?= $word ?><br>
-                            <?php endforeach; ?>
-                        </h5>
+        <?php if (count($_SESSION["curGame"]["words"]) !== 0): ?>
+            <div class="row py-3">
+                <div class="col-xs-12">
+                    <div class="card">
+                        <div class="card-header">
+                            Game
+                        </div>
+                        <div class="card-body">
+                            <div class="row">
+                                <?php foreach ($game["words"] as $index => $word): ?>
+                                    <div class="col-sm-3 p-1">
+                                        <span class="badge bg-primary">
+                                            <?= $index ?>
+                                        </span>
+                                        <?= $word ?>
+                                    </div>
+                                <?php endforeach; ?>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>
+        <?php endif; ?>
+
+        <!-- guesses -->
+        <div class="row">
+            <div class="col-xs-12 py-3">
+                <?php if (isset($_SESSION['guesses']) && !empty($_SESSION['guesses'])): ?>
+                    <h3>Guesses</h3>
+                    <ul class="list-group list-group-flush">
+                        <?php foreach ($_SESSION["guesses"] as $guess): ?>
+                            <li class="list-group-item">
+                                <?= implode(", ", $guess) ?>
+                            </li>
+                        <?php endforeach; ?>
+                    </ul>
+                <?php endif; ?>
+            </div>
         </div>
 
+        <!-- guess input -->
         <div class="row">
-            <div class="col-xs-12">
-                <form action="?command=guess" method="post">
-                    <input type="hidden" name="gameid" value="<?= $game["id"] ?>">
+            <?php if (count($_SESSION["curGame"]["words"]) !== 0): ?>
+                <div class="col-xs-12">
+                    <form action="?command=guess" method="post">
+                        <input type="hidden" name="gameid" value="<?= $game["id"] ?>">
 
-                    <div class="mb-3">
-                        <p>Please input your guess as a space-separated list of numbers</p>
-                        <label for="guess" class="form-label">Connections Guess: </label>
-                        <input type="text" class="form-control" id="guess" name="guess">
-                    </div>
+                        <div class="mb-3">
+                            <i>Please input your guess as a space-separated list of numbers</i><br>
+                            <label for="guess" class="form-label">Connections Guess: </label>
+                            <input type="text" class="form-control" id="guess" name="guess">
+                        </div>
 
-                    <button type="submit" class="btn btn-primary">Guess</button>
-                </form>
-            </div>
+                        <button type="submit" class="btn btn-primary">Guess</button>
+                    </form>
+                </div>
+            <?php endif; ?>
         </div>
     </div>
 
