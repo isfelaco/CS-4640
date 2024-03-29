@@ -19,11 +19,10 @@
         <div class="row">
             <div class="col-xs-12 py-3">
                 <h4>Categories</h4>
-                <ul class="list-group list-group-horizontal py-3">
+                <ul class="list-group list-group-horizontal-sm py-3">
                     <?php foreach ($game["categories"] as $categoryName => $categoryWords): ?>
-                        <li class="list-group-item d-flex justify-content-between align-items-start">
+                        <li class="list-group-item">
                             <div class="ms-2 me-auto">
-
                                 <div class="fw-bold">
                                     <?= $categoryName ?>
                                 </div>
