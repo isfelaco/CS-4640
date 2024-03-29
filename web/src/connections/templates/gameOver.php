@@ -16,26 +16,30 @@
         <h1>Game Over!</h1>
 
         <!-- display categories and their words -->
-        <h4>Categories</h4>
-        <ul class="list-group list-group-horizontal py-3">
-            <?php foreach ($game["categories"] as $categoryName => $categoryWords): ?>
-                <li class="list-group-item d-flex justify-content-between align-items-start">
-                    <div class="ms-2 me-auto">
+        <div class="row">
+            <div class="col-xs-12 py-3">
+                <h4>Categories</h4>
+                <ul class="list-group list-group-horizontal py-3">
+                    <?php foreach ($game["categories"] as $categoryName => $categoryWords): ?>
+                        <li class="list-group-item d-flex justify-content-between align-items-start">
+                            <div class="ms-2 me-auto">
 
-                        <div class="fw-bold">
-                            <?= $categoryName ?>
-                        </div>
-                        <ul class="list-group list-group-flush">
-                            <?php foreach ($categoryWords as $word): ?>
-                                <li class="list-group-item">
-                                    <?= $word ?>
-                                </li>
-                            <?php endforeach; ?>
-                        </ul>
-                    </div>
-                </li>
-            <?php endforeach; ?>
-        </ul>
+                                <div class="fw-bold">
+                                    <?= $categoryName ?>
+                                </div>
+                                <ul class="list-group list-group-flush">
+                                    <?php foreach ($categoryWords as $word): ?>
+                                        <li class="list-group-item">
+                                            <?= $word ?>
+                                        </li>
+                                    <?php endforeach; ?>
+                                </ul>
+                            </div>
+                        </li>
+                    <?php endforeach; ?>
+                </ul>
+            </div>
+        </div>
 
         <!-- display the guesses -->
         <div class="row">
