@@ -13,17 +13,67 @@
 
 <body>
     <div class="container" style="margin-top: 15px;">
-        <h1>Game over!</h1>
+        <h1>Game Over!</h1>
 
+        <!-- display categories and their words -->
+        <h4>Categories</h4>
+        <ul class="list-group list-group-horizontal py-3">
+            <?php foreach ($game["categories"] as $categoryName => $categoryWords): ?>
+                <li class="list-group-item d-flex justify-content-between align-items-start">
+                    <div class="ms-2 me-auto">
+
+                        <div class="fw-bold">
+                            <?= $categoryName ?>
+                        </div>
+                        <ul class="list-group list-group-flush">
+                            <?php foreach ($categoryWords as $word): ?>
+                                <li class="list-group-item">
+                                    <?= $word ?>
+                                </li>
+                            <?php endforeach; ?>
+                        </ul>
+                    </div>
+                </li>
+            <?php endforeach; ?>
+        </ul>
+
+        <!-- display the guesses -->
+        <div class="row">
+            <div class="col-xs-12 py-3">
+                <?php if (isset($_SESSION["guesses"]) && !empty($_SESSION["guesses"])): ?>
+
+                    <h4>Guesses</h4>
+                    <ol class="list-group list-group-flush">
+                        <?php foreach ($_SESSION["guesses"] as $guess): ?>
+                            <li class="list-group-item">
+                                <?= implode(", ", $guess["words"]) ?>
+                                <?php
+                                $numIncorrect = $guess["numIncorrect"];
+
+                                if ($numIncorrect === 0) {
+                                    $class = "badge bg-success";
+                                } elseif ($numIncorrect === 1 || $numIncorrect === 2) {
+                                    $class = "badge bg-warning";
+                                } else {
+                                    $class = "badge bg-danger";
+                                }
+
+                                echo "<span class=\"$class\">" . ($numIncorrect > 0 ? $numIncorrect : "Correct!") . "</span>";
+                                ?>
+                            <?php endforeach; ?>
+                    </ol>
+                <?php endif; ?>
+            </div>
+        </div>
 
 
         <!-- restart game or exit -->
-        <div>
-            <form action="?command=game" method="post">
+        <div class="btn-group pt-3" role="group">
+            <form action="?command=newGame" method="post">
                 <button type="submit" class="btn btn-primary">Play Again</button>
             </form>
 
-            <form action="?command=welcome" method="post">
+            <form action="?command=logout" method="post">
                 <button type="submit" class="btn btn-secondary">Exit</button>
             </form>
         </div>

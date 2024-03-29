@@ -19,10 +19,14 @@
                 <p>Please answer the questions below to begin playing</p>
             </div>
         </div>
+
+        <!-- message -->
+        <?= $message ?>
+
         <!-- login -->
         <div class="row">
             <div class="col-xs-12">
-                <form action="?command=game" method="post">
+                <form action="?command=login" method="post">
                     <div class="mb-3">
                         <label for="name" class="form-label">Name</label>
                         <input type="text" class="form-control" id="name" name="fullname">

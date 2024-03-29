@@ -4,19 +4,23 @@ class ConnectionsController
 {
     private $categories = [];
 
-    private $db;
+
+    // an error message to display on the welcome page
+    private $errorMessage = "";
 
     /**
      * Constructor
      */
     public function __construct($input)
     {
-        $this->db = new Database();
-        $this->input = $input;
-        $this->loadCategories();
-
         // start session
         session_start();
+
+        // set input
+        $this->input = $input;
+
+        // not needed if in the database
+        $this->loadCategories();
     }
 
     /**
@@ -28,10 +32,14 @@ class ConnectionsController
      */
     public function run()
     {
-        // Get the command
+        // get the command
         $command = "example";
         if (isset($this->input["command"]))
             $command = $this->input["command"];
+
+        // if there is no user, redirect to the welcome page
+        if (!isset($_SESSION["name"]) && $command !== "login")
+            $command = "welcome";
 
         switch ($command) {
             case "game":
@@ -43,6 +51,14 @@ class ConnectionsController
             case "endGame":
                 $this->showGameOver();
                 break;
+            case "newGame":
+                $this->restartGame();
+                break;
+            case "login":
+                $this->login();
+                break;
+            case "logout":
+                $this->logout();
             default:
                 $this->showWelcome();
                 break;
@@ -50,70 +66,91 @@ class ConnectionsController
     }
 
     /**
-     * Load game from a file, store them as an array
+     * Load categories from url, store them as an array
      * in the current object.
      */
     public function loadCategories()
     {
-        $url = "https://cs4640.cs.virginia.edu/homework/connections.json";
-        $options = [
-            "ssl" => [
-                "verify_peer" => false,
-                "verify_peer_name" => false,
-            ],
-        ];
-        $context = stream_context_create($options);
-        $jsonData = file_get_contents($url, false, $context);
+        $jsonData = file_get_contents("/opt/src/connections/data/connections.json", true);
+        // $jsonData = file_get_contents("/var/www/html/homework/connections.json");
 
         if ($jsonData === false) {
             echo "Error fetching data from URL.";
         } else {
             $categoryList = json_decode($jsonData, true);
 
-            if ($categoryList === null) {
+            if ($categoryList === null)
                 echo "Error decoding JSON data.";
-            } else {
+            else
                 $this->categories = $categoryList;
-                // foreach ($categoryList as $categoryName => $categoryWords) {
-                //     echo "Category: $categoryName <br>";
-                //     echo "Words: " . implode(", ", $categoryWords) . "<br><br>";
-                // }
-            }
         }
     }
 
     /**
-     * Our getQuestion function, now as a method!
+     * Login Function
+     *
+     * This function checks that the user submitted the form and did not
+     * leave the name and email inputs empty.  If all is well, we set
+     * their information into the session and then send them to the 
+     * question page.  If all didn't go well, we set the class field
+     * errorMessage and show the welcome page again with that message.
+     */
+    public function login()
+    {
+        if (
+            isset($_POST["fullname"]) && isset($_POST["email"]) &&
+            !empty($_POST["fullname"]) && !empty($_POST["email"])
+        ) {
+            $_SESSION["name"] = $_POST["fullname"];
+            $_SESSION["email"] = $_POST["email"];
+            $_SESSION["guesses"] = [];
+            header("Location: ?command=game");
+            return;
+        }
+        $this->errorMessage = "Error logging in - Name and email is required";
+        $this->showWelcome();
+    }
+
+    /**
+     * Logout
+     *
+     * Destroys the session, essentially logging the user out.  It will then start
+     * a new session so that we have $_SESSION if we need it.
+     */
+    public function logout()
+    {
+        session_destroy();
+        session_start();
+    }
+
+
+    /**
+     * If $_SESSION["curGame"] is null, create a game
+     * return $_SESSION["curGame"]
      */
     public function getGame()
     {
-        if (isset($_SESSION['curGame'])) {
-            // return current game from session
-            return $_SESSION['curGame'];
+        // create a new game
+        if (!isset($_SESSION["curGame"])) {
+            // choose 4 random categories
+            $categoryKeys = array_keys($this->categories);
+            shuffle($categoryKeys);
+            $selectedCategoryNames = array_slice($categoryKeys, 0, 4);
+
+            // choose 4 random words from each category
+            $selectedCategories = [];
+            $selectedWords = [];
+            foreach ($selectedCategoryNames as $categoryName) {
+                $words = $this->categories[$categoryName];
+                shuffle($words);
+                $selectedCategories[$categoryName] = array_slice($words, 0, 4);
+                $selectedWords = array_merge($selectedWords, array_slice($words, 0, 4));
+            }
+            shuffle($selectedWords);
+
+            $_SESSION["curGame"] = ["categories" => $selectedCategories, "words" => $selectedWords];
         }
-
-        // generate a random id
-        $id = uniqid();
-        $id = hexdec(substr(sha1($id), 0, 8));
-
-        // choose four categories
-        $categoryNames = array_keys($this->categories);
-        shuffle($categoryNames);
-        $selectedCategories = array_slice($categoryNames, 0, 4);
-
-        // choose 4 words from each category
-        $selectedWords = [];
-        foreach ($selectedCategories as $categoryName) {
-            $words = $this->categories[$categoryName];
-            shuffle($words);
-            $selectedWords = array_merge($selectedWords, array_slice($words, 0, 4));
-        }
-        shuffle($selectedWords);
-
-        // return list of words
-        $curGame = ["id" => $id, "words" => $selectedWords, "categories" => $selectedCategories];
-        $_SESSION["curGame"] = $curGame;
-        return $curGame;
+        return $_SESSION["curGame"];
     }
 
     /**
@@ -123,10 +160,25 @@ class ConnectionsController
      */
     public function showGame($message = "")
     {
-        // get a new game
+        // get user data
+        $name = $_SESSION["name"];
+        $email = $_SESSION["email"];
+
+        // get the current game or a new game
         $game = $this->getGame();
 
         include ("/opt/src/connections/templates/game.php");
+        // include ("./src/templates/game.php");
+    }
+
+    /**
+     * Logic for restarting a game
+     */
+    public function restartGame()
+    {
+        unset($_SESSION["curGame"]);
+        unset($_SESSION["guesses"]);
+        header("Location: ?command=game");
     }
 
     /**
@@ -134,7 +186,13 @@ class ConnectionsController
      */
     public function showWelcome()
     {
+        $message = "";
+        if (!empty($this->errorMessage)) {
+            $message = "<div class='alert alert-danger'>{$this->errorMessage}</div>";
+        }
+
         include ("/opt/src/connections/templates/welcome.php");
+        // include ("./src/templates/welcome.php");
     }
 
     /**
@@ -142,8 +200,9 @@ class ConnectionsController
      */
     public function showGameOver()
     {
-        session_destroy();
+        $game = $this->getGame();
         include ("/opt/src/connections/templates/gameOver.php");
+        // include ("./src/templates/gameOver.php");
     }
 
     /**
@@ -202,47 +261,44 @@ class ConnectionsController
         $game = $this->getGame();
 
         $guess = explode(" ", trim($_POST["guess"]));
-
-        // check to make sure the input is only 4 numbers
-        // check to make sure the indices are in the current list of words
-        // map the numbers to words in the game words
         [$guessWords, $message] = $this->validateGuess($game, $guess);
 
+        // guess is valid, check the guess and update message
         if ($guessWords !== false) {
-            // add guess to list of guesses to display
-            $_SESSION["guesses"][] = $guessWords;
-
-            // for category in $game["categories"]
-            // count the number of words found in the category
-            // if all words are in the list, return correct
-            // else, return incorrect
             $categoryMatched = "";
-            foreach ($game['categories'] as $categoryName) {
-                $wordsFound = 0;
-                foreach ($guessWords as $word) {
-                    if (in_array($word, $this->categories[$categoryName])) {
-                        $wordsFound++;
-                    }
-                }
+            $maxWords = 0;
+            foreach ($game["categories"] as $categoryName => $categoryWords) {
+                $matchedWords = array_intersect($categoryWords, $guessWords);
+                $matchedWordsCount = count($matchedWords);
 
-                if ($wordsFound === 4) {
+                // if all 4 words match, a category is found
+                if ($matchedWordsCount === 4) {
+                    $maxWords = 4;
                     $categoryMatched = $categoryName;
-                    break;
-                }
-            }
-
-            if ($categoryMatched !== "") {
-                $message = "<div class=\"alert alert-success\" role=\"alert\">
+                    $message = "<div class=\"alert alert-success\" role=\"alert\">
                     Correct! The category is {$categoryMatched}</div>";
 
-                // remove the found words from the list of words
-                $_SESSION['curGame']['words'] = array_diff($_SESSION['curGame']["words"], $guessWords);
-            } else {
+                    // remove the found words from the list of words
+                    $_SESSION["curGame"]["words"] = array_diff($_SESSION["curGame"]["words"], $guessWords);
+                    break;
+                }
+
+                // update maxWords
+                if ($matchedWordsCount > $maxWords && $matchedWordsCount >= 2)
+                    $maxWords = $matchedWordsCount;
+
+
+            }
+            // if some words match
+            if ($maxWords >= 2 && $maxWords < 4) {
                 $message = "<div class=\"alert alert-danger\" role=\"alert\">Incorrect!";
-                if ($wordsFound > 1)
-                    $message .= " Your guess is off by " . (4 - $wordsFound) . " word(s).";
+                if ($maxWords !== 0)
+                    $message .= " Your guess is off by " . (4 - $maxWords) . " word(s).";
                 $message .= "</div>";
             }
+
+            // add guess to list of guesses and the number of words correct
+            $_SESSION["guesses"][] = ["words" => $guessWords, "numIncorrect" => (4 - $maxWords)];
         }
         $this->showGame($message);
     }

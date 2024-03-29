@@ -12,10 +12,16 @@
 </head>
 
 <body>
-    <div class="container" style="margin-top: 15px;">
+    <div class="container mt-3">
         <div class="row">
             <div class="col-xs-12">
                 <h1>Connections Game</h1>
+
+                <!-- user's information -->
+                <h2>Welcome
+                    <?= $name ?>! (
+                    <?= $email ?>)
+                </h2>
             </div>
         </div>
 
@@ -61,14 +67,26 @@
         <!-- guesses -->
         <div class="row">
             <div class="col-xs-12 py-3">
-                <?php if (isset($_SESSION['guesses']) && !empty($_SESSION['guesses'])): ?>
+                <?php if (isset($_SESSION["guesses"]) && !empty($_SESSION["guesses"])): ?>
                     <h3>Guesses</h3>
                     <ul class="list-group list-group-flush">
                         <?php foreach ($_SESSION["guesses"] as $guess): ?>
                             <li class="list-group-item">
-                                <?= implode(", ", $guess) ?>
-                            </li>
-                        <?php endforeach; ?>
+                                <?= implode(", ", $guess["words"]) ?>
+                                <?php
+                                $numIncorrect = $guess["numIncorrect"];
+
+                                if ($numIncorrect === 0) {
+                                    $class = "badge bg-success";
+                                } elseif ($numIncorrect === 1 || $numIncorrect === 2) {
+                                    $class = "badge bg-warning";
+                                } else {
+                                    $class = "badge bg-danger";
+                                }
+
+                                echo "<span class=\"$class\">" . ($numIncorrect > 0 ? $numIncorrect : "Correct!") . "</span>";
+                                ?>
+                            <?php endforeach; ?>
                     </ul>
                 <?php endif; ?>
             </div>
@@ -79,8 +97,6 @@
             <?php if (count($_SESSION["curGame"]["words"]) !== 0): ?>
                 <div class="col-xs-12">
                     <form action="?command=guess" method="post">
-                        <input type="hidden" name="gameid" value="<?= $game["id"] ?>">
-
                         <div class="mb-3">
                             <i>Please input your guess as a space-separated list of numbers</i><br>
                             <label for="guess" class="form-label">Connections Guess: </label>
