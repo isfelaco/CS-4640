@@ -66,7 +66,6 @@
             </div>
         </div>
 
-
         <!-- restart game or exit -->
         <div class="btn-group pt-3" role="group">
             <form action="?command=newGame" method="post">

@@ -4,7 +4,6 @@ class ConnectionsController
 {
     private $categories = [];
 
-
     // an error message to display on the welcome page
     private $errorMessage = "";
 
