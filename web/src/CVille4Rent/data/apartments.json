@@ -4,20 +4,23 @@
     "address": "Address 1",
     "rent": 1000,
     "bedrooms": 1,
-    "bathrooms": 1
+    "bathrooms": 1,
+    "description": "description 1"
   },
   {
     "name": "Apartment 2",
     "address": "Address 2",
     "rent": 1000,
     "bedrooms": 1,
-    "bathrooms": 1
+    "bathrooms": 1,
+    "description": "description 2"
   },
   {
     "name": "Apartment 3",
     "address": "Address 3",
     "rent": 1000,
     "bedrooms": 1,
-    "bathrooms": 1
+    "bathrooms": 1,
+    "description": "description 3"
   }
 ]

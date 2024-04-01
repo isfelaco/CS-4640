@@ -26,28 +26,39 @@ class Controller
     public function run()
     {
         // Get the command
-        $command = "example";
-        if (isset($this->input["command"]))
-            $command = $this->input["command"];
-
+        $command = isset($this->input["command"]) ? $this->input["command"] : "home";
         switch ($command) {
-            default:
+            case "home":
                 $this->showHome();
+                break;
+            case "apartment":
+                $this->showApartment();
+                break;
+            default:
+                $this->showNotFound();
                 break;
         }
     }
 
-    /**
-     * Show the example page to the user.
-     */
-    public function showExample()
-    {
-        $dataElement = print_r($this->input, true);
-        include ("/opt/src/example/templates/example.php");
-    }
 
+    /**
+     * Show the home page to the user
+     */
     public function showHome()
     {
         include ("/opt/src/CVille4Rent/templates/home.php");
+    }
+
+    public function showNotFound()
+    {
+        // You can customize this as needed
+        echo "404 Not Found";
+    }
+
+    public function showApartment()
+    {
+        $apartmentName = isset($this->input["name"]) ? $this->input["name"] : "";
+        $apartment = $this->db->getApartment($apartmentName)[0];
+        include "/opt/src/CVille4Rent/templates/apartment.php";
     }
 }
