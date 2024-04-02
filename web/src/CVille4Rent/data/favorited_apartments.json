@@ -1,0 +1,5 @@
+[
+  { "user_email": "user1@example.com", "apartment_name": "Apartment 1" },
+  { "user_email": "user1@example.com", "apartment_name": "Apartment 2" },
+  { "user_email": "user1@example.com", "apartment_name": "Apartment 3" }
+]

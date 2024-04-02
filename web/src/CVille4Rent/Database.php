@@ -46,6 +46,14 @@ class Database
         if ($result[0]['count'] == 0) {
             $this->insertRatingsDataFromJson('/opt/src/CVille4Rent/data/ratings.json');
         }
+
+        // insert data from JSON file into favorited_apartments table
+        $queryCheckEmpty = "SELECT COUNT(*) FROM favorited_apartments";
+        $result = $this->query($queryCheckEmpty);
+
+        if ($result[0]['count'] == 0) {
+            $this->insertFavoritedApartmentsDataFromJson('/opt/src/CVille4Rent/data/favorited_apartments.json');
+        }
     }
 
 
@@ -116,7 +124,6 @@ class Database
 
     private function insertApartmentDataFromJson($jsonFile)
     {
-        // Read and parse the JSON file
         $apartmentsJson = file_get_contents($jsonFile);
         $apartmentsData = json_decode($apartmentsJson, true);
 
@@ -140,7 +147,6 @@ class Database
 
     private function insertRatingsDataFromJson($jsonFile)
     {
-        // Read and parse the JSON file
         $ratingsJSON = file_get_contents($jsonFile);
         $ratingsData = json_decode($ratingsJSON, true);
 
@@ -156,6 +162,24 @@ class Database
                 $rating['rating'],
                 $rating['rent_paid'],
                 $rating['comment']
+            ];
+            $this->query($queryInsert, ...$params);
+        }
+    }
+
+    private function insertFavoritedApartmentsDataFromJson($jsonFile)
+    {
+        $favoritesJSON = file_get_contents($jsonFile);
+        $favoritesData = json_decode($favoritesJSON, true);
+
+        foreach ($favoritesData as $favorite) {
+            $queryInsert = "
+                INSERT INTO favorited_apartments (user_email, apartment_name)
+                VALUES ($1, $2)
+            ";
+            $params = [
+                $favorite['user_email'],
+                $favorite['apartment_name']
             ];
             $this->query($queryInsert, ...$params);
         }
@@ -205,6 +229,8 @@ class Database
      */
     public function getFavoritedApartments($user)
     {
-
+        $query = "SELECT * FROM favorited_apartments WHERE user_email = $1";
+        $result = $this->query($query, $_SESSION['user']);
+        return $result;
     }
 }

@@ -149,6 +149,5 @@ class Controller
     {
         $apartments = $this->db->getFavoritedApartments($_SESSION["user"]);
         include "/opt/src/CVille4Rent/templates/favorites.php";
-
     }
 }
