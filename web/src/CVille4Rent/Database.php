@@ -72,25 +72,26 @@ class Database
     {
         $queryCreateApartments = "
             CREATE TABLE IF NOT EXISTS apartments (
-                id SERIAL PRIMARY KEY,
                 name VARCHAR(100) NOT NULL,
                 description TEXT,
                 address TEXT,
                 rent DECIMAL(10, 2),
                 bedrooms INT,
-                bathrooms INT
+                bathrooms INT,
+                PRIMARY KEY (name, address)
             )
         ";
         $this->query($queryCreateApartments);
 
         $queryCreateRatings = "
           CREATE TABLE IF NOT EXISTS ratings (
-                id SERIAL PRIMARY KEY,
-                title VARCHAR(100) NOT NULL,
+                user_email VARCHAR(100),
+                title VARCHAR(100),
                 apartment_name VARCHAR(100) NOT NULL,
                 rating DECIMAL(10, 2),
                 rent_paid DECIMAL(10, 2),
-                comment TEXT
+                comment TEXT,
+                PRIMARY KEY (user_email, title)
             )
         ";
         $this->query($queryCreateRatings);
@@ -102,6 +103,15 @@ class Database
             )
         ";
         $this->query($queryCreateUsers);
+
+        $queryCreateFavoritedApartments = "
+          CREATE TABLE IF NOT EXISTS favorited_apartments (
+                user_email VARCHAR(100),
+                apartment_name VARCHAR(100),
+                PRIMARY KEY (user_email, apartment_name)
+            )
+        ";
+        $this->query($queryCreateFavoritedApartments);
     }
 
     private function insertApartmentDataFromJson($jsonFile)
@@ -136,10 +146,11 @@ class Database
 
         foreach ($ratingsData as $rating) {
             $queryInsert = "
-                INSERT INTO ratings (title, apartment_name, rating, rent_paid, comment)
-                VALUES ($1, $2, $3, $4, $5)
+                INSERT INTO ratings (user_email, title, apartment_name, rating, rent_paid, comment)
+                VALUES ($1, $2, $3, $4, $5, $6)
             ";
             $params = [
+                $rating['user_email'],
                 $rating['title'],
                 $rating['apartment_name'],
                 $rating['rating'],
@@ -187,5 +198,13 @@ class Database
         $query = "SELECT * FROM ratings WHERE apartment_name = $1";
         $result = $this->query($query, $apartmentName);
         return $result;
+    }
+
+    /**
+     * Get apartments favorited by the user
+     */
+    public function getFavoritedApartments($user)
+    {
+
     }
 }

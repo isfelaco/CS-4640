@@ -1,5 +1,6 @@
 [
   {
+    "user": "user1@example.com",
     "title": "Rating 1a",
     "apartment_name": "Apartment 1",
     "rating": 1,
@@ -7,6 +8,7 @@
     "comment": "Comment 1a"
   },
   {
+    "user": "user1@example.com",
     "title": "Rating 2",
     "apartment_name": "Apartment 2",
     "rating": 2,
@@ -14,6 +16,7 @@
     "comment": "Comment 2"
   },
   {
+    "user": "user1@example.com",
     "title": "Rating 1",
     "apartment_name": "Apartment 3",
     "rating": 3,
@@ -21,6 +24,7 @@
     "comment": "Comment 3"
   },
   {
+    "user": "user1@example.com",
     "title": "Rating 1b",
     "apartment_name": "Apartment 1",
     "rating": 1,

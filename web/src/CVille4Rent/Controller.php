@@ -38,6 +38,9 @@ class Controller
             case "login":
                 $this->loginDatabase();
                 break;
+            case "logout":
+                $this->logout();
+                break;
             case "profile":
                 $this->showProfile();
                 break;
@@ -135,8 +138,16 @@ class Controller
         // $this->showHome();
     }
 
+    public function logout()
+    {
+        session_destroy();
+        session_start();
+        header("Location: ?command=home");
+    }
+
     public function showFavorites()
     {
+        $apartments = $this->db->getFavoritedApartments($_SESSION["user"]);
         include "/opt/src/CVille4Rent/templates/favorites.php";
 
     }
