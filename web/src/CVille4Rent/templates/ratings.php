@@ -19,7 +19,7 @@
         integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous" />
     <script src="https://cdn.jsdelivr.net/npm/bootstrap"></script>
 
-    <link rel="stylesheet/less" type="text/css" href="styles/main.less" />
+    <link rel="stylesheet/less" type="text/css" href="main.less" />
     <script src="https://cdn.jsdelivr.net/npm/less"></script>
 
 </head>

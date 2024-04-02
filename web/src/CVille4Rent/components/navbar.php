@@ -8,17 +8,18 @@
     </button>
     <div class="collapse navbar-collapse" id="navbarSupportedContent">
       <ul class="navbar-nav me-auto mb-2 mb-lg-0">
-        <li class="nav-item">
-          <!-- hidden={user logged in} -->
-          <button class="nav-link" data-bs-toggle="modal" data-bs-target="#modal">Login
-          </button>
-        </li>
-        <li>
-          <!-- hidden={no user logged in} -->
-          <a class="nav-link" href="profile.php">
-            Profile
-          </a>
-        </li>
+        <?php if (empty($_SESSION["user"])): ?>
+          <li class="nav-item">
+            <button class="nav-link" data-bs-toggle="modal" data-bs-target="#modal">Login
+            </button>
+          </li>
+        <?php else: ?>
+          <li>
+            <a class="nav-link" href="?command=profile">
+              Profile
+            </a>
+          </li>
+        <?php endif; ?>
       </ul>
     </div>
   </div>

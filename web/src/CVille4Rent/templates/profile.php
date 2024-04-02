@@ -19,7 +19,7 @@
     integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous" />
   <script src="https://cdn.jsdelivr.net/npm/bootstrap"></script>
 
-  <link rel="stylesheet/less" type="text/css" href="styles/main.less" />
+  <link rel="stylesheet/less" type="text/css" href="main.less" />
   <script src="https://cdn.jsdelivr.net/npm/less"></script>
 </head>
 
@@ -33,22 +33,17 @@
     <div class="col-md-4">
       <label for="update-email" class="form-label">Email Address</label>
       <div id="update-email" class="input-group mb-3">
-        <input type="text" class="form-control editable-input" placeholder="User" disabled>
+        <input type="text" class="form-control editable-input" placeholder="User"
+          value="<?= isset($_SESSION['user']) ? $_SESSION['user'] : ''; ?>" disabled>
         <span class="input-group-text">@</span>
         <input type="text" class="form-control editable-input" placeholder="Server" aria-label="Server" disabled>
       </div>
     </div>
 
-    <!-- user password -->
-    <div class="col-md-4">
-      <label for="update-password" class="form-label">Password</label>
-      <input id="update-password" type="text" class="form-control editable-input" placeholder="Password" disabled>
-    </div>
-
     <button id="edit-button" class="btn btn-info" type="button" onclick="toggleInput()">Edit Profile</button>
 
-    <a role="button" href="favorites.php" class="btn btn-light">View Favorite Apartments</a>
-    <a role="button" href="ratings.php" class="btn btn-light">View Ratings</a>
+    <a role="button" href="?command=favorites" class="btn btn-light">View Favorite Apartments</a>
+    <a role="button" href="?command=ratings" class="btn btn-light">View Ratings</a>
   </div>
 
   <script>

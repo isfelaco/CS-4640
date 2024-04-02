@@ -21,14 +21,14 @@
         integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous" />
     <script src="https://cdn.jsdelivr.net/npm/bootstrap"></script>
 
-    <link rel="stylesheet/less" type="text/css" href="styles/main.less" />
+    <link rel="stylesheet/less" type="text/css" href="main.less" />
     <script src="https://cdn.jsdelivr.net/npm/less"></script>
 
 </head>
 
 <body>
     <?php include '/opt/src/CVille4Rent/components/navbar.php'; ?>
-    <?php include '/opt/src/CVille4Rent/data/generateLists.php'; ?>
+    <!-- <?php include '/opt/src/CVille4Rent/styles/main.less'; ?> -->
 
     <h1>CVille 4 Rent</h1>
     <div class="base-container">

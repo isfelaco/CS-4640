@@ -94,6 +94,14 @@ class Database
             )
         ";
         $this->query($queryCreateRatings);
+
+        $queryCreateUsers = "
+          CREATE TABLE IF NOT EXISTS users (
+                email VARCHAR(100) PRIMARY KEY,
+                password VARCHAR(100)
+            )
+        ";
+        $this->query($queryCreateUsers);
     }
 
     private function insertApartmentDataFromJson($jsonFile)
