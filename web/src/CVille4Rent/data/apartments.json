@@ -22,5 +22,29 @@
     "bedrooms": 1,
     "bathrooms": 1,
     "description": "description 3"
+  },
+  {
+    "name": "Apartment 4",
+    "address": "Address 4",
+    "rent": 1000,
+    "bedrooms": 1,
+    "bathrooms": 1,
+    "description": "description 4"
+  },
+  {
+    "name": "Apartment 5",
+    "address": "Address 5",
+    "rent": 1000,
+    "bedrooms": 1,
+    "bathrooms": 1,
+    "description": "description 5"
+  },
+  {
+    "name": "Apartment 6",
+    "address": "Address 6",
+    "rent": 1000,
+    "bedrooms": 1,
+    "bathrooms": 1,
+    "description": "description 6"
   }
 ]

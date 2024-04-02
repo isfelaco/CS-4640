@@ -62,7 +62,9 @@ class Controller
      */
     public function showHome()
     {
-        $apartments = $this->db->getApartments();
+        $page = isset($_POST['page']) ? $_POST['page'] : 1;
+        $apartments = $this->db->getApartmentsPaginated($page);
+        $aptCount = count($this->db->getApartments());
         include ("/opt/src/CVille4Rent/templates/home.php");
     }
 

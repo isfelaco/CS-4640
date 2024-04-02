@@ -77,16 +77,50 @@
 
         <!-- will navigate to paginated results of apartments -->
         <nav aria-label="pagination">
-            <ul class="pagination">
-                <li class="page-item">
-                    <a class="page-link" href="">Previous</a>
+            <ul class="pagination justify-content-center">
+                <?php
+                $perPage = 3; // Number of items per page
+                $totalPages = ceil($aptCount / $perPage);
+
+                $prevDisabled = $page <= 1 ? 'disabled' : '';
+                $nextDisabled = $page >= $totalPages ? 'disabled' : '';
+                ?>
+                <li class="page-item <?= $prevDisabled ?>">
+                    <form method="POST" action="?command=home">
+                        <input type="hidden" name="page" value="<?= ($page - 1) ?>">
+                    </form>
+                    <button class="page-link">Previous</button>
                 </li>
-                <li class="page-item"><a class="page-link" href="">1</a></li>
-                <li class="page-item"><a class="page-link" href="">2</a></li>
-                <li class="page-item"><a class="page-link" href="">3</a></li>
-                <li class="page-item"><a class="page-link" href="">Next</a></li>
+                <?php for ($i = 1; $i <= $totalPages; $i++): ?>
+                    <li class="page-item <?= ($page == $i ? 'active' : '') ?>">
+                        <form method="POST" action="?command=home">
+                            <input type="hidden" name="page" value="<?= $i ?>">
+                        </form>
+                        <button class="page-link">
+                            <?= $i ?>
+                        </button>
+                    </li>
+                <?php endfor; ?>
+                <li class="page-item <?= $nextDisabled ?>">
+                    <form method="POST" action="?command=home"><input type="hidden" name="page"
+                            value="<?= ($page + 1) ?>">
+                    </form>
+                    <button class="page-link">Next</button>
+                </li>
             </ul>
         </nav>
+        <script>
+            var pagination = document.getElementsByClassName("pagination")[0];
+            var forms = pagination.getElementsByTagName("form");
+            var buttons = pagination.getElementsByClassName("page-link");
+            for (var i = 0; i < buttons.length; i++) {
+                (function (index) {
+                    buttons[index].addEventListener("click", function () {
+                        forms[index].submit();
+                    });
+                })(i);
+            }
+        </script>
     </div>
 </body>
 

@@ -31,6 +31,19 @@ class Database
         // Create tables if they don't exist
         $this->createTables();
 
+        // insert a user
+        $queryCheckEmpty = "SELECT COUNT(*) FROM users";
+        $result = $this->query($queryCheckEmpty);
+
+        if ($result[0]['count'] == 0) {
+            $this->query(
+                "INSERT INTO users (email, password) values ($1, $2);",
+                "user1@example.com",
+                // Use the hashed password!
+                password_hash("pass1", PASSWORD_DEFAULT)
+            );
+        }
+
         // insert data from JSON file into apartments table
         $queryCheckEmpty = "SELECT COUNT(*) FROM apartments";
         $result = $this->query($queryCheckEmpty);
@@ -55,18 +68,7 @@ class Database
             $this->insertFavoritedApartmentsDataFromJson('/opt/src/CVille4Rent/data/favorited_apartments.json');
         }
 
-        // insert a user
-        $queryCheckEmpty = "SELECT COUNT(*) FROM users";
-        $result = $this->query($queryCheckEmpty);
 
-        if ($result[0]['count'] == 0) {
-            $this->query(
-                "INSERT INTO users (email, password) values ($1, $2);",
-                "user1@example.com",
-                // Use the hashed password!
-                password_hash("pass1", PASSWORD_DEFAULT)
-            );
-        }
     }
 
 
@@ -214,6 +216,20 @@ class Database
     public function getApartments()
     {
         $query = "SELECT * FROM apartments";
+        $result = $this->query($query);
+        return $result;
+    }
+
+    /**
+     * Get paginated apartments
+     */
+    public function getApartmentsPaginated($page = 1, $perPage = 3)
+    {
+        // Calculate the offset based on the current page and items per page
+        $offset = ($page - 1) * $perPage;
+
+        // Prepare the SQL query with LIMIT and OFFSET clauses
+        $query = "SELECT * FROM apartments LIMIT $perPage OFFSET $offset";
         $result = $this->query($query);
         return $result;
     }
