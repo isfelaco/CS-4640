@@ -47,6 +47,9 @@ class Controller
             case "favorites":
                 $this->showFavorites();
                 break;
+            case "ratings":
+                $this->showRatings();
+                break;
             default:
                 $this->showNotFound();
                 break;
@@ -145,9 +148,21 @@ class Controller
         header("Location: ?command=home");
     }
 
+    /**
+     * Show the apartments favorited by the user
+     */
     public function showFavorites()
     {
         $apartments = $this->db->getFavoritedApartments($_SESSION["user"]);
         include "/opt/src/CVille4Rent/templates/favorites.php";
+    }
+
+    /**
+     * Show ratings posted by the user
+     */
+    public function showRatings()
+    {
+        $ratings = $this->db->getUserRatings($_SESSION["user"]);
+        include "/opt/src/CVille4Rent/templates/ratings.php";
     }
 }

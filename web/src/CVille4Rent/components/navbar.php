@@ -77,11 +77,6 @@
                   Incorrect Password
                 </div>
               </div>
-
-              <!-- login button - will submit form and authenticate user -->
-              <!-- <button class="btn btn-primary" type="submit">
-                Login
-              </button> -->
             </form>
           </div>
           <div class="modal-footer">

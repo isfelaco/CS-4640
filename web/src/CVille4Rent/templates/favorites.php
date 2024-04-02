@@ -25,21 +25,42 @@
 </head>
 
 <body>
-    <?php include 'components/navbar.php'; ?>
-    <?php include 'data/generateLists.php'; ?>
+    <?php include '/opt/src/CVille4Rent/components/navbar.php'; ?>
 
     <h1>Favorite Apartments</h1>
 
     <div class="base-container">
         <i>Click an apartment to view more information</i>
 
-        <!-- listing of all favorite apartments - will filter by apartments favorite by user -->
+        <!-- listing of all favorite apartments -->
         <div class="list-group" aria-label="list">
-            <?php
-            $jsonString = file_get_contents('data/apartments.json');
-            $apartments = json_decode($jsonString, true);
-            echo generateApartmentList($apartments);
-            ?>
+            <?php foreach ($apartments as $apartment): ?>
+                <div class="list-group-item">
+                    <a href="?command=apartment&name=<?= $apartment["name"] ?>"
+                        class="list-group-item list-group-item-action">
+                        <h4>
+                            <?= $apartment['name'] ?>
+                        </h4>
+                        <ul class="list-group list-group-flush">
+                            <li class="list-group-item"><b>Address:</b>
+                                <?= $apartment['address'] ?? 'N/A'; ?>
+                            </li>
+                            <li class="list-group-item"><b>Rent:</b>
+                                <?= $apartment['rent'] ?? 'N/A'; ?>
+                            </li>
+                            <li class="list-group-item"><b>Bedrooms:</b>
+                                <?= $apartment['bedrooms'] ?? 'N/A'; ?>
+                            </li>
+                            <li class="list-group-item"><b>Bathrooms:</b>
+                                <?= $apartment['bathrooms'] ?? 'N/A'; ?>
+                            </li>
+                            <li class="list-group-item"><b>Description:</b>
+                                <?= $apartment['description'] ?? 'N/A'; ?>
+                            </li>
+                        </ul>
+                    </a>
+                </div>
+            <?php endforeach; ?>
         </div>
     </div>
 </body>

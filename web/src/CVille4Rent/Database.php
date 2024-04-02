@@ -54,6 +54,19 @@ class Database
         if ($result[0]['count'] == 0) {
             $this->insertFavoritedApartmentsDataFromJson('/opt/src/CVille4Rent/data/favorited_apartments.json');
         }
+
+        // insert a user
+        $queryCheckEmpty = "SELECT COUNT(*) FROM users";
+        $result = $this->query($queryCheckEmpty);
+
+        if ($result[0]['count'] == 0) {
+            $this->query(
+                "INSERT INTO users (email, password) values ($1, $2);",
+                "user1@example.com",
+                // Use the hashed password!
+                password_hash("pass1", PASSWORD_DEFAULT)
+            );
+        }
     }
 
 
@@ -78,15 +91,22 @@ class Database
 
     private function createTables()
     {
+        $queryCreateUsers = "
+          CREATE TABLE IF NOT EXISTS users (
+                email VARCHAR(100) PRIMARY KEY,
+                password VARCHAR(100)
+            )
+        ";
+        $this->query($queryCreateUsers);
+
         $queryCreateApartments = "
             CREATE TABLE IF NOT EXISTS apartments (
-                name VARCHAR(100) NOT NULL,
+                name VARCHAR(100) PRIMARY KEY,
                 description TEXT,
                 address TEXT,
                 rent DECIMAL(10, 2),
                 bedrooms INT,
-                bathrooms INT,
-                PRIMARY KEY (name, address)
+                bathrooms INT
             )
         ";
         $this->query($queryCreateApartments);
@@ -99,24 +119,20 @@ class Database
                 rating DECIMAL(10, 2),
                 rent_paid DECIMAL(10, 2),
                 comment TEXT,
-                PRIMARY KEY (user_email, title)
+                PRIMARY KEY (user_email, title),
+                FOREIGN KEY (user_email) REFERENCES users(email),
+                FOREIGN KEY (apartment_name) REFERENCES apartments(name)
             )
         ";
         $this->query($queryCreateRatings);
-
-        $queryCreateUsers = "
-          CREATE TABLE IF NOT EXISTS users (
-                email VARCHAR(100) PRIMARY KEY,
-                password VARCHAR(100)
-            )
-        ";
-        $this->query($queryCreateUsers);
 
         $queryCreateFavoritedApartments = "
           CREATE TABLE IF NOT EXISTS favorited_apartments (
                 user_email VARCHAR(100),
                 apartment_name VARCHAR(100),
-                PRIMARY KEY (user_email, apartment_name)
+                PRIMARY KEY (user_email, apartment_name),
+                FOREIGN KEY (user_email) REFERENCES users(email),
+                FOREIGN KEY (apartment_name) REFERENCES apartments(name)
             )
         ";
         $this->query($queryCreateFavoritedApartments);
@@ -187,10 +203,8 @@ class Database
 
     public function dropTables()
     {
-        // Drop the apartments table
-        $queryDropApartmentsTable = "DROP TABLE IF EXISTS apartments";
-        $this->query($queryDropApartmentsTable);
-
+        $queryDropTables = "DROP TABLE IF EXISTS ratings, favorited_apartments, apartments, users CASCADE;";
+        $this->query($queryDropTables);
         echo "Tables dropped successfully.";
     }
 
@@ -229,8 +243,21 @@ class Database
      */
     public function getFavoritedApartments($user)
     {
-        $query = "SELECT * FROM favorited_apartments WHERE user_email = $1";
+        $query = "SELECT a.* 
+            FROM favorited_apartments fa
+            JOIN apartments a ON fa.apartment_name = a.name
+            WHERE fa.user_email = $1;";
         $result = $this->query($query, $_SESSION['user']);
+        return $result;
+    }
+
+    /**
+     * Get ratings posted by a user
+     */
+    public function getUserRatings($user)
+    {
+        $query = "SELECT * FROM ratings WHERE user_email = $1";
+        $result = $this->query($query, $user);
         return $result;
     }
 }
