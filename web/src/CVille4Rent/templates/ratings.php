@@ -31,42 +31,47 @@
 
     <div class="base-container">
         <!-- listing of all ratings by user -->
-        <div class="list-group" aria-label="list">
-            <?php foreach ($ratings as $rating): ?>
-                <div class="list-group-item">
-                    <h4>
-                        <?= $rating['title'] ?>
-                    </h4>
-                    <ul class="list-group list-group-flush">
-                        <li class="list-group-item"><b>Apartment Name: </b>
-                            <?= $rating["apartment_name"] ?>
-                        </li>
-                        <li class="list-group-item"><b>Rent Paid: </b>
-                            <?= $rating["rent_paid"] ?>
-                        </li>
-                        <li class="list-group-item"><b>Rating: </b>
-                            <?= $rating["rating"] ?>
-                        </li>
-                        <li class="list-group-item"><b>Comment: </b>
-                            <?= $rating["comment"] ?>
-                        </li>
-                    </ul>
-                </div>
-            <?php endforeach; ?>
-        </div>
+        <?php if (count($ratings) >= 3): ?>
+            <div class="list-group" aria-label="list">
+                <?php foreach ($ratings as $rating): ?>
+                    <div class="list-group-item">
+                        <h4>
+                            <?= $rating['title'] ?>
+                        </h4>
+                        <ul class="list-group list-group-flush">
+                            <li class="list-group-item"><b>Apartment Name: </b>
+                                <?= $rating["apartment_name"] ?>
+                            </li>
+                            <li class="list-group-item"><b>Rent Paid: </b>
+                                <?= $rating["rent_paid"] ?>
+                            </li>
+                            <li class="list-group-item"><b>Rating: </b>
+                                <?= $rating["rating"] ?>
+                            </li>
+                            <li class="list-group-item"><b>Comment: </b>
+                                <?= $rating["comment"] ?>
+                            </li>
+                        </ul>
+                    </div>
+                <?php endforeach; ?>
+            </div>
 
-        <!-- will navigate to paginated results of ratings -->
-        <nav aria-label="pagination">
-            <ul class="pagination">
-                <li class="page-item">
-                    <a class="page-link" href="">Previous</a>
-                </li>
-                <li class="page-item"><a class="page-link" href="">1</a></li>
-                <li class="page-item"><a class="page-link" href="">2</a></li>
-                <li class="page-item"><a class="page-link" href="">3</a></li>
-                <li class="page-item"><a class="page-link" href="">Next</a></li>
-            </ul>
-        </nav>
+            <nav aria-label="pagination">
+                <ul class="pagination">
+                    <li class="page-item">
+                        <a class="page-link" href="">Previous</a>
+                    </li>
+                    <li class="page-item"><a class="page-link" href="">1</a></li>
+                    <li class="page-item"><a class="page-link" href="">2</a></li>
+                    <li class="page-item"><a class="page-link" href="">3</a></li>
+                    <li class="page-item"><a class="page-link" href="">Next</a></li>
+                </ul>
+            </nav>
+        <?php else: ?>
+            <div class="alert alert-light" role="alert">
+                You haven't left any ratings!
+            </div>
+        <?php endif; ?>
     </div>
 </body>
 

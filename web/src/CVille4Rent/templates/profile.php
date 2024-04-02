@@ -33,31 +33,15 @@
     <div class="col-md-4">
       <label for="update-email" class="form-label">Email Address</label>
       <div id="update-email" class="input-group mb-3">
-        <input type="text" class="form-control editable-input" placeholder="User"
+        <input type="text" class="form-control" placeholder="User"
           value="<?= isset($_SESSION['user']) ? $_SESSION['user'] : ''; ?>" disabled>
-        <span class="input-group-text">@</span>
-        <input type="text" class="form-control editable-input" placeholder="Server" aria-label="Server" disabled>
       </div>
     </div>
-
-    <button id="edit-button" class="btn btn-info" type="button" onclick="toggleInput()">Edit Profile</button>
-
-    <a role="button" href="?command=favorites" class="btn btn-light">View Favorite Apartments</a>
-    <a role="button" href="?command=ratings" class="btn btn-light">View Ratings</a>
+    <div class="btn-group" role="group">
+      <a role="button" href="?command=favorites" class="btn btn-outline-dark">View Favorite Apartments</a>
+      <a role="button" href="?command=ratings" class="btn btn-outline-dark">View Ratings</a>
+    </div>
   </div>
-
-  <script>
-    /* function to toggle the edit button + disable/enable inputs */
-    function toggleInput() {
-      var inputs = document.querySelectorAll('.editable-input');
-      inputs.forEach(function (input) {
-        input.disabled = !input.disabled;
-        const button = document.getElementById("edit-button");
-        if (!input.disabled) button.innerHTML = "Save Changes";
-        else button.innerHTML = "Edit Profile";
-      });
-    }
-  </script>
 </body>
 
 </html>

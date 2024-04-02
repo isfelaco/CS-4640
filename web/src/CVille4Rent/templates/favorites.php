@@ -30,14 +30,13 @@
     <h1>Favorite Apartments</h1>
 
     <div class="base-container">
-        <i>Click an apartment to view more information</i>
+        <?php if (count($apartments) >= 3): ?>
+            <i>Click an apartment to view more information</i>
 
-        <!-- listing of all favorite apartments -->
-        <div class="list-group" aria-label="list">
-            <?php foreach ($apartments as $apartment): ?>
-                <div class="list-group-item">
-                    <a href="?command=apartment&name=<?= $apartment["name"] ?>"
-                        class="list-group-item list-group-item-action">
+            <!-- listing of all favorite apartments -->
+            <div class="list-group" aria-label="list">
+                <?php foreach ($apartments as $apartment): ?>
+                    <a href="?command=apartment&name=<?= $apartment["name"] ?>" class="list-group-item list-group-item-action">
                         <h4>
                             <?= $apartment['name'] ?>
                         </h4>
@@ -59,9 +58,13 @@
                             </li>
                         </ul>
                     </a>
-                </div>
-            <?php endforeach; ?>
-        </div>
+                <?php endforeach; ?>
+            </div>
+        <?php else: ?>
+            <div class="alert alert-light" role="alert">
+                You haven't "favorited" any apartments!
+            </div>
+        <?php endif; ?>
     </div>
 </body>
 

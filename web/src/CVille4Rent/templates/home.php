@@ -44,38 +44,35 @@
         </span>
 
         <!-- listing of apartments -->
-        <div class="list-group" aria-label="list">
+        <div class="list-group list-group-flush" aria-label="list">
             <?php foreach ($apartments as $apartment): ?>
-                <div class="list-group-item">
-                    <a href="?command=apartment&name=<?= $apartment['name'] ?>"
-                        class="list-group-item list-group-item-action">
-                        <h4>
-                            <?= $apartment['name'] ?>
-                        </h4>
-                        <ul class="list-group list-group-flush">
-                            <li class="list-group-item"><b>Address:</b>
-                                <?= $apartment['address'] ?? 'N/A'; ?>
-                            </li>
-                            <li class="list-group-item"><b>Rent:</b>
-                                <?= $apartment['rent'] ?? 'N/A'; ?>
-                            </li>
-                            <li class="list-group-item"><b>Bedrooms:</b>
-                                <?= $apartment['bedrooms'] ?? 'N/A'; ?>
-                            </li>
-                            <li class="list-group-item"><b>Bathrooms:</b>
-                                <?= $apartment['bathrooms'] ?? 'N/A'; ?>
-                            </li>
-                            <li class="list-group-item"><b>Description:</b>
-                                <?= $apartment['description'] ?? 'N/A'; ?>
-                            </li>
-                        </ul>
-                    </a>
-                </div>
+                <a href="?command=apartment&name=<?= $apartment['name'] ?>" class="list-group-item list-group-item-action">
+                    <h4>
+                        <?= $apartment['name'] ?>
+                    </h4>
+                    <ul class="list-group list-group-flush">
+                        <li class="list-group-item"><b>Address:</b>
+                            <?= $apartment['address'] ?? 'N/A'; ?>
+                        </li>
+                        <li class="list-group-item"><b>Rent:</b>
+                            <?= $apartment['rent'] ?? 'N/A'; ?>
+                        </li>
+                        <li class="list-group-item"><b>Bedrooms:</b>
+                            <?= $apartment['bedrooms'] ?? 'N/A'; ?>
+                        </li>
+                        <li class="list-group-item"><b>Bathrooms:</b>
+                            <?= $apartment['bathrooms'] ?? 'N/A'; ?>
+                        </li>
+                        <li class="list-group-item"><b>Description:</b>
+                            <?= $apartment['description'] ?? 'N/A'; ?>
+                        </li>
+                    </ul>
+                </a>
             <?php endforeach; ?>
         </div>
 
         <!-- will navigate to paginated results of apartments -->
-        <?php if (count($apartments) > 3): ?>
+        <?php if (count($apartments) >= 3): ?>
             <nav aria-label="pagination">
                 <ul class="pagination justify-content-center">
                     <?php
