@@ -59,6 +59,7 @@ class Controller
     {
         $apartmentName = isset($this->input["name"]) ? $this->input["name"] : "";
         $apartment = $this->db->getApartment($apartmentName)[0];
+        $ratings = $this->db->getRatings($apartmentName);
         include "/opt/src/CVille4Rent/templates/apartment.php";
     }
 }

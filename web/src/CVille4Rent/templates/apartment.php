@@ -26,10 +26,8 @@
 <body>
   <?php include '/opt/src/CVille4Rent/components/navbar.php'; ?>
   <?php include '/opt/src/CVille4Rent/data/generateLists.php'; ?>
-  <?php $name = $_GET['name']; ?>
-
   <h1>
-    <?php echo $name; ?>
+    <?php echo $_GET['name']; ?>
   </h1>
 
   <div class="base-container">
@@ -56,27 +54,28 @@
     </div>
     <section>
       <h2>Ratings</h2>
-
       <div class="list-group" aria-label="list">
-        <?php
-        $jsonString = file_get_contents('/opt/src/CVille4Rent/data/ratings.json');
-        $ratings = json_decode($jsonString, true);
-        foreach ($ratings as $rating) {
-          if ($rating['apartment']['name'] == $_GET['name']) {
-            $html = '<div class="list-group-item">';
-            $html .= '<h4>' . $rating['title'] . '</h4>';
-            $html .= '<ul class="list-group list-group-flush">';
-            $html .= '<li class="list-group-item"><b>Apartment Name:</b> ' . $rating['apartment']['name'] . '</li>';
-            $html .= '<li class="list-group-item"><b>Rent Paid:</b> ' . $rating['rentPaid'] . '</li>';
-            $html .= '<li class="list-group-item"><b>Rating:</b> ' . $rating['rating'] . '</li>';
-            $html .= '<li class="list-group-item"><b>Comment:</b> ' . $rating['comment'] . '</li>';
-            $html .= '</ul>';
-            $html .= '</div>';
-            break;
-          }
-        }
-        echo $html;
-        ?>
+        <?php foreach ($ratings as $rating): ?>
+          <div class="list-group-item">
+            <h4>
+              <?= $rating['title'] ?>
+            </h4>
+            <ul class="list-group list-group-flush">
+              <li class="list-group-item"><b>Apartment Name: </b>
+                <?= $rating["apartment_name"] ?>
+              </li>
+              <li class="list-group-item"><b>Rent Paid: </b>
+                <?= $rating["rent_paid"] ?>
+              </li>
+              <li class="list-group-item"><b>Rating: </b>
+                <?= $rating["rating"] ?>
+              </li>
+              <li class="list-group-item"><b>Comment: </b>
+                <?= $rating["comment"] ?>
+              </li>
+            </ul>
+          </div>
+        <?php endforeach; ?>
       </div>
     </section>
   </div>

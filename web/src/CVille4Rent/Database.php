@@ -31,13 +31,20 @@ class Database
         // Create tables if they don't exist
         $this->createTables();
 
-
+        // insert data from JSON file into apartments table
         $queryCheckEmpty = "SELECT COUNT(*) FROM apartments";
         $result = $this->query($queryCheckEmpty);
 
         if ($result[0]['count'] == 0) {
-            // Insert data from JSON file
-            $this->insertDataFromJson('/opt/src/CVille4Rent/data/apartments.json');
+            $this->insertApartmentDataFromJson('/opt/src/CVille4Rent/data/apartments.json');
+        }
+
+        // insert data from JSON file into ratings table
+        $queryCheckEmpty = "SELECT COUNT(*) FROM ratings";
+        $result = $this->query($queryCheckEmpty);
+
+        if ($result[0]['count'] == 0) {
+            $this->insertRatingsDataFromJson('/opt/src/CVille4Rent/data/ratings.json');
         }
     }
 
@@ -63,7 +70,7 @@ class Database
 
     private function createTables()
     {
-        $queryCreateTable = "
+        $queryCreateApartments = "
             CREATE TABLE IF NOT EXISTS apartments (
                 id SERIAL PRIMARY KEY,
                 name VARCHAR(100) NOT NULL,
@@ -74,11 +81,22 @@ class Database
                 bathrooms INT
             )
         ";
+        $this->query($queryCreateApartments);
 
-        $this->query($queryCreateTable);
+        $queryCreateRatings = "
+          CREATE TABLE IF NOT EXISTS ratings (
+                id SERIAL PRIMARY KEY,
+                title VARCHAR(100) NOT NULL,
+                apartment_name VARCHAR(100) NOT NULL,
+                rating DECIMAL(10, 2),
+                rent_paid DECIMAL(10, 2),
+                comment TEXT
+            )
+        ";
+        $this->query($queryCreateRatings);
     }
 
-    private function insertDataFromJson($jsonFile)
+    private function insertApartmentDataFromJson($jsonFile)
     {
         // Read and parse the JSON file
         $apartmentsJson = file_get_contents($jsonFile);
@@ -101,6 +119,29 @@ class Database
         }
     }
 
+
+    private function insertRatingsDataFromJson($jsonFile)
+    {
+        // Read and parse the JSON file
+        $ratingsJSON = file_get_contents($jsonFile);
+        $ratingsData = json_decode($ratingsJSON, true);
+
+        foreach ($ratingsData as $rating) {
+            $queryInsert = "
+                INSERT INTO ratings (title, apartment_name, rating, rent_paid, comment)
+                VALUES ($1, $2, $3, $4, $5)
+            ";
+            $params = [
+                $rating['title'],
+                $rating['apartment_name'],
+                $rating['rating'],
+                $rating['rent_paid'],
+                $rating['comment']
+            ];
+            $this->query($queryInsert, ...$params);
+        }
+    }
+
     public function dropTables()
     {
         // Drop the apartments table
@@ -115,6 +156,15 @@ class Database
     {
         $query = "
             SELECT * FROM apartments WHERE name = $1
+        ";
+        $result = $this->query($query, $apartmentName);
+        return $result;
+    }
+
+    public function getRatings($apartmentName)
+    {
+        $query = "
+            SELECT * FROM ratings WHERE apartment_name = $1
         ";
         $result = $this->query($query, $apartmentName);
         return $result;
