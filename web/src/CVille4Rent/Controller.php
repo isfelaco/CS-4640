@@ -46,6 +46,7 @@ class Controller
      */
     public function showHome()
     {
+        $apartments = $this->db->getApartments();
         include ("/opt/src/CVille4Rent/templates/home.php");
     }
 

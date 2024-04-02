@@ -43,11 +43,33 @@
 
         <!-- listing of apartments -->
         <div class="list-group" aria-label="list">
-            <?php
-            $jsonString = file_get_contents('/opt/src/CVille4Rent/data/apartments.json');
-            $apartments = json_decode($jsonString, true);
-            echo generateApartmentList($apartments);
-            ?>
+            <?php foreach ($apartments as $apartment): ?>
+                <div class="list-group-item">
+                    <a href="?command=apartment&name=<?= $apartment["name"] ?>"
+                        class="list-group-item list-group-item-action">
+                        <h4>
+                            <?= $apartment['name'] ?>
+                        </h4>
+                        <ul class="list-group list-group-flush">
+                            <li class="list-group-item"><b>Address:</b>
+                                <?= $apartment['address'] ?? 'N/A'; ?>
+                            </li>
+                            <li class="list-group-item"><b>Rent:</b>
+                                <?= $apartment['rent'] ?? 'N/A'; ?>
+                            </li>
+                            <li class="list-group-item"><b>Bedrooms:</b>
+                                <?= $apartment['bedrooms'] ?? 'N/A'; ?>
+                            </li>
+                            <li class="list-group-item"><b>Bathrooms:</b>
+                                <?= $apartment['bathrooms'] ?? 'N/A'; ?>
+                            </li>
+                            <li class="list-group-item"><b>Description:</b>
+                                <?= $apartment['description'] ?? 'N/A'; ?>
+                            </li>
+                        </ul>
+                    </a>
+                </div>
+            <?php endforeach; ?>
         </div>
 
         <!-- will navigate to paginated results of apartments -->

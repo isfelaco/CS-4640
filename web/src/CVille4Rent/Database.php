@@ -151,21 +151,32 @@ class Database
         echo "Tables dropped successfully.";
     }
 
+    /**
+     * Get all apartments
+     */
+    public function getApartments()
+    {
+        $query = "SELECT * FROM apartments";
+        $result = $this->query($query);
+        return $result;
+    }
 
+    /**
+     * Get apartment by apartment name
+     */
     public function getApartment($apartmentName)
     {
-        $query = "
-            SELECT * FROM apartments WHERE name = $1
-        ";
+        $query = "SELECT * FROM apartments WHERE name = $1";
         $result = $this->query($query, $apartmentName);
         return $result;
     }
 
+    /**
+     * Get ratings by apartment name
+     */
     public function getRatings($apartmentName)
     {
-        $query = "
-            SELECT * FROM ratings WHERE apartment_name = $1
-        ";
+        $query = "SELECT * FROM ratings WHERE apartment_name = $1";
         $result = $this->query($query, $apartmentName);
         return $result;
     }
