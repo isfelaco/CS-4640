@@ -31,15 +31,14 @@
 
 <body>
     <?php include '/opt/src/CVille4Rent/components/navbar.php'; ?>
-    <!-- <?php include '/opt/src/CVille4Rent/styles/main.less'; ?> -->
 
     <h1>CVille 4 Rent</h1>
     <div class="base-container">
         <!-- instructions and search bar -->
         <span>
             <i>Click an apartment to view more information or Search by name</i>
-            <form class="d-flex" role="search">
-                <input class="form-control me-2" type="search" placeholder="Search" aria-label="Search">
+            <form class="d-flex" role="search" method="POST" action="?command=search">
+                <input class="form-control me-2" name="search" type="search" placeholder="Search" aria-label="Search">
                 <button class="btn btn-secondary" type="submit">Search</button>
             </form>
         </span>
@@ -48,7 +47,7 @@
         <div class="list-group" aria-label="list">
             <?php foreach ($apartments as $apartment): ?>
                 <div class="list-group-item">
-                    <a href="?command=apartment&name=<?= $apartment["name"] ?>"
+                    <a href="?command=apartment&name=<?= $apartment['name'] ?>"
                         class="list-group-item list-group-item-action">
                         <h4>
                             <?= $apartment['name'] ?>
@@ -76,51 +75,53 @@
         </div>
 
         <!-- will navigate to paginated results of apartments -->
-        <nav aria-label="pagination">
-            <ul class="pagination justify-content-center">
-                <?php
-                $perPage = 3; // Number of items per page
-                $totalPages = ceil($aptCount / $perPage);
+        <?php if (count($apartments) > 3): ?>
+            <nav aria-label="pagination">
+                <ul class="pagination justify-content-center">
+                    <?php
+                    $perPage = 3; // Number of items per page
+                    $totalPages = ceil($aptCount / $perPage);
 
-                $prevDisabled = $page <= 1 ? 'disabled' : '';
-                $nextDisabled = $page >= $totalPages ? 'disabled' : '';
-                ?>
-                <li class="page-item <?= $prevDisabled ?>">
-                    <form method="POST" action="?command=home">
-                        <input type="hidden" name="page" value="<?= ($page - 1) ?>">
-                    </form>
-                    <button class="page-link">Previous</button>
-                </li>
-                <?php for ($i = 1; $i <= $totalPages; $i++): ?>
-                    <li class="page-item <?= ($page == $i ? 'active' : '') ?>">
+                    $prevDisabled = $page <= 1 ? 'disabled' : '';
+                    $nextDisabled = $page >= $totalPages ? 'disabled' : '';
+                    ?>
+                    <li class="page-item <?= $prevDisabled ?>">
                         <form method="POST" action="?command=home">
-                            <input type="hidden" name="page" value="<?= $i ?>">
+                            <input type="hidden" name="page" value="<?= ($page - 1) ?>">
                         </form>
-                        <button class="page-link">
-                            <?= $i ?>
-                        </button>
+                        <button class="page-link">Previous</button>
                     </li>
-                <?php endfor; ?>
-                <li class="page-item <?= $nextDisabled ?>">
-                    <form method="POST" action="?command=home"><input type="hidden" name="page"
-                            value="<?= ($page + 1) ?>">
-                    </form>
-                    <button class="page-link">Next</button>
-                </li>
-            </ul>
-        </nav>
-        <script>
-            var pagination = document.getElementsByClassName("pagination")[0];
-            var forms = pagination.getElementsByTagName("form");
-            var buttons = pagination.getElementsByClassName("page-link");
-            for (var i = 0; i < buttons.length; i++) {
-                (function (index) {
-                    buttons[index].addEventListener("click", function () {
-                        forms[index].submit();
-                    });
-                })(i);
-            }
-        </script>
+                    <?php for ($i = 1; $i <= $totalPages; $i++): ?>
+                        <li class="page-item <?= ($page == $i ? 'active' : '') ?>">
+                            <form method="POST" action="?command=home">
+                                <input type="hidden" name="page" value="<?= $i ?>">
+                            </form>
+                            <button class="page-link">
+                                <?= $i ?>
+                            </button>
+                        </li>
+                    <?php endfor; ?>
+                    <li class="page-item <?= $nextDisabled ?>">
+                        <form method="POST" action="?command=home"><input type="hidden" name="page"
+                                value="<?= ($page + 1) ?>">
+                        </form>
+                        <button class="page-link">Next</button>
+                    </li>
+                </ul>
+            </nav>
+            <script>
+                var pagination = document.getElementsByClassName("pagination")[0];
+                var forms = pagination.getElementsByTagName("form");
+                var buttons = pagination.getElementsByClassName("page-link");
+                for (var i = 0; i < buttons.length; i++) {
+                    (function (index) {
+                        buttons[index].addEventListener("click", function () {
+                            forms[index].submit();
+                        });
+                    })(i);
+                }
+            </script>
+        <?php endif; ?>
     </div>
 </body>
 

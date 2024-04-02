@@ -50,6 +50,9 @@ class Controller
             case "ratings":
                 $this->showRatings();
                 break;
+            case "search":
+                $this->search();
+                break;
             default:
                 $this->showNotFound();
                 break;
@@ -94,7 +97,6 @@ class Controller
      */
     public function showNotFound()
     {
-        // You can customize this as needed
         echo "404 Not Found";
     }
 
@@ -166,5 +168,17 @@ class Controller
     {
         $ratings = $this->db->getUserRatings($_SESSION["user"]);
         include "/opt/src/CVille4Rent/templates/ratings.php";
+    }
+
+    /**
+     * Search for an apartment
+     */
+    public function search()
+    {
+        if (isset($_POST['search']) && !empty($_POST['search'])) {
+            $apartments = $this->db->getApartment($_POST['search']);
+            include ("/opt/src/CVille4Rent/templates/home.php");
+        } else
+            header("Location: ?command=home");
     }
 }
