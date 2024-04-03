@@ -18,6 +18,7 @@
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet"
     integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous" />
   <script src="https://cdn.jsdelivr.net/npm/bootstrap"></script>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.7.2/font/bootstrap-icons.css" rel="stylesheet">
 
   <link rel="stylesheet/less" type="text/css" href="main.less" />
   <script src="https://cdn.jsdelivr.net/npm/less"></script>
@@ -25,32 +26,53 @@
 
 <body>
   <?php include '/opt/src/CVille4Rent/components/navbar.php'; ?>
+
+  <?php
+  $isApartmentFavorited = false;
+  $favoritedApartments = $this->db->getFavoritedApartments($_SESSION['user']);
+  foreach ($favoritedApartments as $favApartment) {
+    if ($favApartment['name'] == $apartment['name']) {
+      $isApartmentFavorited = true;
+      break;
+    }
+  }
+  ?>
   <h1>
-    <?php echo $_GET['name']; ?>
+    <?= $apartment['name']; ?>
   </h1>
 
   <div class="base-container">
+    <form id="favorite-form" method="post" action="?command=favorite">
+      <button type="submit" id="heart-icon" class="btn btn-light">
+        <?= $isApartmentFavorited ? "Un-Favorite Apartment" : 'Favorite Apartment'; ?> <i
+          class="bi <?= $isApartmentFavorited ? 'bi-heart-fill' : 'bi-heart'; ?>"></i>
+      </button>
+      <input type="hidden" name="apartment_name" value="<?= $apartment['name'] ?>">
+      <input type="hidden" name="favorite" value="<?= $isApartmentFavorited ?>">
+    </form>
+
     <div class="list-group" aria-label="list">
       <div class="list-group-item">
         <ul class="list-group list-group-flush">
           <li class="list-group-item"><b>Address:</b>
-            <?php echo $apartment['address'] ?? 'N/A'; ?>
+            <?= $apartment['address'] ?? 'N/A'; ?>
           </li>
           <li class="list-group-item"><b>Rent:</b>
-            <?php echo $apartment['rent'] ?? 'N/A'; ?>
+            <?= $apartment['rent'] ?? 'N/A'; ?>
           </li>
           <li class="list-group-item"><b>Bedrooms:</b>
-            <?php echo $apartment['bedrooms'] ?? 'N/A'; ?>
+            <?= $apartment['bedrooms'] ?? 'N/A'; ?>
           </li>
           <li class="list-group-item"><b>Bathrooms:</b>
-            <?php echo $apartment['bathrooms'] ?? 'N/A'; ?>
+            <?= $apartment['bathrooms'] ?? 'N/A'; ?>
           </li>
           <li class="list-group-item"><b>Description:</b>
-            <?php echo $apartment['description'] ?? 'N/A'; ?>
+            <?= $apartment['description'] ?? 'N/A'; ?>
           </li>
         </ul>
       </div>
     </div>
+
     <section>
       <h2>Ratings</h2>
       <div class="list-group" aria-label="list">

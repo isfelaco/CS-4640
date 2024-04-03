@@ -263,7 +263,7 @@ class Database
             FROM favorited_apartments fa
             JOIN apartments a ON fa.apartment_name = a.name
             WHERE fa.user_email = $1;";
-        $result = $this->query($query, $_SESSION['user']);
+        $result = $this->query($query, $user);
         return $result;
     }
 
@@ -275,5 +275,23 @@ class Database
         $query = "SELECT * FROM ratings WHERE user_email = $1";
         $result = $this->query($query, $user);
         return $result;
+    }
+
+    /**
+     * Favorite an apartment
+     */
+    public function favoriteApartment($user_email, $apartment_name)
+    {
+        $query = "INSERT INTO favorited_apartments(user_email, apartment_name) VALUES ($1, $2)";
+        $this->query($query, $user_email, $apartment_name);
+    }
+
+    /**
+     * Un-favorite an apartment
+     */
+    public function unfavoriteApartment($user_email, $apartment_name)
+    {
+        $query = "DELETE FROM favorited_apartments WHERE user_email = $1 AND apartment_name = $2";
+        $this->query($query, $user_email, $apartment_name);
     }
 }

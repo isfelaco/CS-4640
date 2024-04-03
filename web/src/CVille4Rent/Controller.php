@@ -53,6 +53,9 @@ class Controller
             case "search":
                 $this->search();
                 break;
+            case "favorite":
+                $this->favorite();
+                break;
             default:
                 $this->showNotFound();
                 break;
@@ -181,4 +184,17 @@ class Controller
         } else
             header("Location: ?command=home");
     }
+
+    public function favorite()
+    {
+        $favorite = $_POST['favorite'];
+        $apartment_name = $_POST['apartment_name'];
+        if ($favorite)
+            $this->db->unfavoriteApartment($_SESSION['user'], $apartment_name);
+        else
+            $this->db->favoriteApartment($_SESSION['user'], $apartment_name);
+        $prevUrl = $_SERVER['HTTP_REFERER'];
+        header("Location: $prevUrl");
+    }
+
 }

@@ -30,7 +30,7 @@
     <h1>Favorite Apartments</h1>
 
     <div class="base-container">
-        <?php if (count($apartments) >= 3): ?>
+        <?php if (count($apartments) >= 0): ?>
             <i>Click an apartment to view more information</i>
 
             <!-- listing of all favorite apartments -->
