@@ -47,8 +47,7 @@
             <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
           </div>
           <div class="modal-body">
-            <div class="alert alert-danger" id="error-message" style="display: none">
-            </div>
+            <div class="alert alert-danger" id="error-message" style="display: none"></div>
             <form id="login-form" class="row g-3 needs-validation" novalidate action="" method="POST">
               <!-- email address input -->
               <div class="form-floating mb-3">
@@ -63,7 +62,7 @@
               <!-- password input -->
               <div class="form-floating">
                 <input type="password" class="form-control" id="password" name="password" placeholder="Password"
-                  required>
+                  required pattern="(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{8,}">
                 <!-- pattern="(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{8,}" -->
                 <label for="password">Password</label>
                 <div class="invalid-feedback">

@@ -40,7 +40,7 @@ class Database
                 "INSERT INTO users (email, password) values ($1, $2);",
                 "user1@example.com",
                 // Use the hashed password!
-                password_hash("pass1", PASSWORD_DEFAULT)
+                password_hash("Password1", PASSWORD_DEFAULT)
             );
         }
 
@@ -238,6 +238,23 @@ class Database
     public function getApartment($apartmentName)
     {
         $query = "SELECT * FROM apartments WHERE name = $1";
+        $result = $this->query($query, $apartmentName);
+        return $result;
+    }
+
+    /**
+     * Get apartment by apartment name and return json
+     */
+    public function getApartmentJson($apartmentName)
+    {
+        $query = "SELECT json_build_object(
+                'name', a.name,
+                'address', a.address,
+                'rent', a.rent,
+                'bedrooms', a.bedrooms,
+                'bathrooms', a.bathrooms,
+                'description', a.description
+            ) AS apt_info FROM apartments a WHERE name = $1";
         $result = $this->query($query, $apartmentName);
         return $result;
     }
