@@ -28,12 +28,14 @@
   <?php include '/opt/src/CVille4Rent/components/navbar.php'; ?>
 
   <?php
-  $isApartmentFavorited = false;
-  $favoritedApartments = $this->db->getFavoritedApartments($_SESSION['user']);
-  foreach ($favoritedApartments as $favApartment) {
-    if ($favApartment['name'] == $apartment['name']) {
-      $isApartmentFavorited = true;
-      break;
+  if (isset($_SESSION['user'])) {
+    $isApartmentFavorited = false;
+    $favoritedApartments = $this->db->getFavoritedApartments($_SESSION['user']);
+    foreach ($favoritedApartments as $favApartment) {
+      if ($favApartment['name'] == $apartment['name']) {
+        $isApartmentFavorited = true;
+        break;
+      }
     }
   }
   ?>
@@ -43,10 +45,12 @@
 
   <div class="base-container">
     <form id="favorite-form" method="post" action="?command=favorite">
-      <button type="submit" id="heart-icon" class="btn btn-light">
-        <?= $isApartmentFavorited ? "Un-Favorite Apartment" : 'Favorite Apartment'; ?> <i
-          class="bi <?= $isApartmentFavorited ? 'bi-heart-fill' : 'bi-heart'; ?>"></i>
-      </button>
+      <?php if (isset($_SESSION['user'])): ?>
+        <button type="submit" id="heart-icon" class="btn btn-light">
+          <?= $isApartmentFavorited ? "Un-Favorite Apartment" : 'Favorite Apartment'; ?> <i
+            class="bi <?= $isApartmentFavorited ? 'bi-heart-fill' : 'bi-heart'; ?>"></i>
+        </button>
+      <?php endif; ?>
       <input type="hidden" name="apartment_name" value="<?= $apartment['name'] ?>">
       <input type="hidden" name="favorite" value="<?= $isApartmentFavorited ?>">
     </form>
