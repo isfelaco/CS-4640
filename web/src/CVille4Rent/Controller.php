@@ -105,47 +105,39 @@ class Controller
 
     public function loginDatabase()
     {
-        // User must provide a non-empty name, email, and password to attempt a login
-        print_r($_POST);
-        if (
-            isset($_POST["email"]) && !empty($_POST["email"]) &&
-            isset($_POST["password"]) && !empty($_POST["password"])
-        ) {
+        // non-empty fields handled before form submit
+        // Check if user is in database, by email
+        $res = $this->db->query("SELECT * from users where email = $1;", $_POST["email"]);
+        if (empty($res)) {
+            // User was not there (empty result), so insert them
+            // $this->db->query(
+            //     "INSERT INTO users (name, email, password, score) values ($1, $2);",
+            //     $_POST["email"],
+            //     // Use the hashed password!
+            //     password_hash($_POST["password"], PASSWORD_DEFAULT)
+            // );
+            // $_SESSION["user"] = $_POST["email"];
+            // $message = "New user created";
+            // header("Location: ?command=profile&message=" . urlencode($message));
+            // header("Location: ?command=profile");
 
-            // Check if user is in database, by email
-            $res = $this->db->query("SELECT * from users where email = $1;", $_POST["email"]);
-            if (empty($res)) {
-                // User was not there (empty result), so insert them
-                $this->db->query(
-                    "INSERT INTO users (name, email, password, score) values ($1, $2, $3, $4);",
-                    $_POST["email"],
-                    // Use the hashed password!
-                    password_hash($_POST["password"], PASSWORD_DEFAULT),
-                    0
-                );
-                $_SESSION["user"] = $_POST["email"];
-                header("Location: ?command=profile");
-                return;
-            } else {
-                // User was in the database, verify password is correct
-                // Note: Since we used a 1-way hash, we must use password_verify()
-                // to check that the passwords match.
-                if (password_verify($_POST["password"], $res[0]["password"])) {
-                    // Password was correct, save their information to the
-                    // session and send them to the question page
-                    $_SESSION["user"] = $res[0]["email"];
-                    header("Location: ?command=profile");
-                    return;
-                } else {
-                    // Password was incorrect
-                    echo "Incorrect password.";
-                }
-            }
+            echo "No user with email found";
         } else {
-            echo "Email and password are required.";
+            // User was in the database, verify password is correct
+            // Note: Since we used a 1-way hash, we must use password_verify()
+            // to check that the passwords match.
+            if (password_verify($_POST["password"], $res[0]["password"])) {
+                // Password was correct, save their information to the
+                // session and send them to the question page
+                $_SESSION["user"] = $res[0]["email"];
+                echo "success";
+            } else {
+                // Password was incorrect
+                $_SESSION['message'] = "Incorrect password.";
+                echo "Incorrect password";
+                // header("Location: ?command=home");
+            }
         }
-        // If something went wrong, show the home page again
-        // $this->showHome();
     }
 
     public function logout()

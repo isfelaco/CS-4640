@@ -67,8 +67,6 @@ class Database
         if ($result[0]['count'] == 0) {
             $this->insertFavoritedApartmentsDataFromJson('/opt/src/CVille4Rent/data/favorited_apartments.json');
         }
-
-
     }
 
 
