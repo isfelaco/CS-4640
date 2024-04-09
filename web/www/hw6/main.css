@@ -17,6 +17,7 @@ td {
   vertical-align: middle;
 }
 
-.col {
-  border: 1px solid red;
+.btn-group {
+  display: flex;
+  flex-wrap: wrap;
 }
