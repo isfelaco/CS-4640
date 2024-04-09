@@ -64,21 +64,54 @@ async function getRandomCategories(callback) {
 let selectedCells = [];
 
 /**
- * Setup a new game
+ * Setup a new board with new words
+ * Called after startSession and whenever the New Game button is clicked
  */
 function setUpNewGame(newCategories) {
-  window.localStorage.clear();
-  selectedCells = [];
+  // update the number of games played, streak, and total guesses
+  const games = JSON.parse(window.localStorage.getItem("games"));
+  window.localStorage.setItem("games", JSON.stringify(games + 1));
+  const prevWords = JSON.parse(window.localStorage.getItem("words")) || [];
+  if (prevWords.length !== 0) window.localStorage.setItem("streak", 0);
+  //   const guesses = JSON.parse(window.localStorage.getItem("guesses"));
+  //   const totalGuesses = window.localStorage.getItem("total-guesses");
+  //   window.localStorage.setItem("total-guesses", totalGuesses + guesses.length);
 
+  // get new categories and words
   const categories = newCategories.categories;
   const words = categories.flatMap((category) => category.words);
   const shuffledWords = shuffleArray(words);
-
   window.localStorage.setItem("categories", JSON.stringify(categories));
   window.localStorage.setItem("words", JSON.stringify(shuffledWords));
+
+  // reset the guesses and the selectedCells
   window.localStorage.setItem("guesses", JSON.stringify([]));
-  renderGrid();
-  updateGuessesList();
+  window.localStorage.setItem("selectedCells", JSON.stringify([]));
+
+  // render the updated UI
+  location.reload();
+}
+
+/**
+ * Start a new session
+ */
+function startSession() {
+  // initialize user stats
+  window.localStorage.setItem("games", 0);
+  window.localStorage.setItem("wins", 0);
+  window.localStorage.setItem("streak", 0);
+  window.localStorage.setItem("avg-guesses", 0);
+  window.localStorage.setItem("total-guesses", 0);
+
+  getRandomCategories(setUpNewGame);
+}
+
+/**
+ * End the user's current session
+ */
+function endSession() {
+  window.localStorage.clear();
+  location.reload();
 }
 
 /**
@@ -140,6 +173,8 @@ function shuffleBoard() {
  * Select/deselect a cell
  */
 function toggleCellSelection(cell) {
+  var selectedCells =
+    JSON.parse(window.localStorage.getItem("selectedCells")) || [];
   if (selectedCells.length === 4 && !cell.classList.contains("selected")) {
     // there are already 4 cells selected
     return;
@@ -156,23 +191,22 @@ function toggleCellSelection(cell) {
     cell.classList.add("selected");
     selectedCells.push(cell.textContent);
   }
-
-  // enable/disable the submit button
-  const guessBtn = document.getElementById("guess-button");
-  if (selectedCells.length === 4) guessBtn.disabled = false;
-  else guessBtn.disabled = true;
+  document.getElementById("guess-button").disabled = selectedCells.length !== 4;
+  window.localStorage.setItem("selectedCells", JSON.stringify(selectedCells));
 }
+
 /**
  * Submit a guess
  */
 function handleGuess() {
+  var selectedCells = JSON.parse(window.localStorage.getItem("selectedCells"));
   console.log("Submitting guess: ", selectedCells);
 
   const categories = JSON.parse(window.localStorage.getItem("categories"));
   const words = JSON.parse(window.localStorage.getItem("words"));
-  console.log(words);
 
   let matchCount = 0;
+  let filteredWords = words;
 
   for (const category of categories) {
     const catWords = category.words;
@@ -191,11 +225,9 @@ function handleGuess() {
     // check if the entire guess matches the category
     if (curCount === 4) {
       // remove the correctly guessed words from the grid
-      const filteredWords = words.filter(
-        (word) => !selectedCells.includes(word)
-      );
+      filteredWords = words.filter((word) => !selectedCells.includes(word));
       window.localStorage.setItem("words", JSON.stringify(filteredWords));
-      renderGrid();
+
       break;
     }
   }
@@ -204,13 +236,48 @@ function handleGuess() {
   guesses.push({ guess: [...selectedCells], matchCount });
   window.localStorage.setItem("guesses", JSON.stringify(guesses));
 
+  // reset the selectedCells
   if (matchCount === 4) selectedCells = [];
+  window.localStorage.setItem("selectedCells", JSON.stringify(selectedCells));
 
-  // update the guess list
-  updateGuessesList(matchCount);
+  // if there are no words left, the game is over
+  if (filteredWords.length === 0) handleWin();
+
+  // update the page
+  location.reload();
 }
 
-function updateGuessesList() {
+/**
+ * Perform actions if user wins a game
+ */
+function handleWin() {
+  var wins = JSON.parse(window.localStorage.getItem("wins"));
+  window.localStorage.setItem("wins", JSON.stringify(wins + 1));
+
+  var streak = JSON.parse(window.localStorage.getItem("streak"));
+  window.localStorage.setItem("streak", JSON.stringify(streak + 1));
+
+  updateAvgGuesses();
+}
+
+/**
+ * Update the average guesses per win
+ */
+function updateAvgGuesses() {
+  const games = JSON.parse(window.localStorage.getItem("games"));
+  const curGuesses = JSON.parse(window.localStorage.getItem("guesses"));
+  const totalGuesses =
+    JSON.parse(window.localStorage.getItem("total-guesses")) +
+    curGuesses.length;
+  window.localStorage.setItem("total-guesses", JSON.stringify(totalGuesses));
+  const avgGuesses = totalGuesses / games;
+  window.localStorage.setItem("avg-guesses", avgGuesses.toFixed(2));
+}
+
+/**
+ * Display the guess list
+ */
+function renderGuessesList() {
   const list = document.getElementById("guesses-list");
   list.innerHTML = ""; // Clear previous content
 
@@ -242,8 +309,40 @@ function updateGuessesList() {
     }
     badge.classList.add("badge", badgeClass);
     badge.textContent = matchCount;
+    guessItem.appendChild(document.createTextNode(" "));
     guessItem.appendChild(badge);
 
     list.appendChild(guessItem);
   });
+}
+
+/**
+ * Display the user's stats
+ */
+function renderStats() {
+  const list = document.getElementById("user-stats");
+  list.innerHTML = "";
+
+  const gamesItem = document.createElement("li");
+  gamesItem.classList.add("list-group-item");
+  gamesItem.textContent =
+    "Games Played: " + window.localStorage.getItem("games");
+  list.appendChild(gamesItem);
+
+  const winsItem = document.createElement("li");
+  winsItem.classList.add("list-group-item");
+  winsItem.textContent = "Games Won: " + window.localStorage.getItem("wins");
+  list.appendChild(winsItem);
+
+  const streakItem = document.createElement("li");
+  streakItem.classList.add("list-group-item");
+  streakItem.textContent =
+    "Current Streak: " + window.localStorage.getItem("streak");
+  list.appendChild(streakItem);
+
+  const avgGuessesItem = document.createElement("li");
+  avgGuessesItem.classList.add("list-group-item");
+  avgGuessesItem.textContent =
+    "Average Guesses per Win: " + window.localStorage.getItem("avg-guesses");
+  list.appendChild(avgGuessesItem);
 }

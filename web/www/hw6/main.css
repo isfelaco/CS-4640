@@ -1,5 +1,22 @@
 tr .selected {
-  background-color: yellow;
+  background-color: orange;
+  color: white;
   font-weight: bold;
   cursor: pointer;
+}
+
+table {
+  max-width: 400px;
+}
+
+td {
+  width: 100px;
+  height: 100px;
+
+  text-align: center;
+  vertical-align: middle;
+}
+
+.col {
+  border: 1px solid red;
 }
