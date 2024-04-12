@@ -86,6 +86,7 @@ function setUpNewGame(newCategories) {
   window.localStorage.setItem("selectedCells", JSON.stringify([]));
 
   /* re-render the UI */
+  document.getElementById("alert").style.display = "none";
   renderGame();
 }
 
@@ -215,6 +216,9 @@ function toggleCellSelection(cell) {
  * Submit a guess
  */
 function handleGuess() {
+  const alert = document.getElementById("alert");
+  alert.style.display = "none";
+
   var selectedCells = JSON.parse(window.localStorage.getItem("selectedCells"));
   console.log("Submitting guess: ", selectedCells);
 
@@ -243,6 +247,10 @@ function handleGuess() {
       // remove the correctly guessed words from the grid
       filteredWords = words.filter((word) => !selectedCells.includes(word));
       window.localStorage.setItem("words", JSON.stringify(filteredWords));
+
+      // send feedback with correct category
+      alert.style.display = "block";
+      alert.textContent = "Correct! The category is " + category.category;
 
       break;
     }
