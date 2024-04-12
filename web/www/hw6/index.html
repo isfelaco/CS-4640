@@ -53,7 +53,7 @@
                   New Game
                 </button>
 
-                <!-- shuffle the board -->
+                <!-- shuffle the board button -->
                 <button
                   type="button"
                   class="btn btn-primary"
@@ -102,46 +102,7 @@
 
     <script>
       document.addEventListener("DOMContentLoaded", function () {
-        //   getRandomCategories(setUpNewGame);
-        const sessionBtn = document.getElementById("session-button");
-        const newGameBtn = document.getElementById("new-game-button");
-
-        if (localStorage.length === 0) {
-          // there should be no game displayed and there should be a button
-          // that allows the user to start a session
-          sessionBtn.textContent = "Start a New Session";
-          sessionBtn.onclick = function () {
-            startSession();
-          };
-          sessionBtn.classList.remove("btn-danger");
-          sessionBtn.classList.add("btn-success");
-
-          newGameBtn.disabled = true;
-        } else {
-          sessionBtn.textContent = "End Session";
-          sessionBtn.onclick = function () {
-            endSession();
-          };
-          sessionBtn.classList.remove("btn-success");
-          sessionBtn.classList.add("btn-danger");
-
-          newGameBtn.disabled = false;
-
-          window.localStorage.setItem("selectedCells", JSON.stringify([]));
-
-          renderGrid();
-          renderGuessesList();
-          renderStats();
-        }
-        // enable/disable the submit button
-        // const guessBtn = document.getElementById("guess-button");
-        // guessBtn.disabled = selectedCells.length !== 4;
-
-        const shuffleBtn = document.getElementById("shuffle-button");
-        shuffleBtn.disabled =
-          JSON.parse(localStorage.getItem("words") || "[]").length === 0;
-
-        //   const loggedInUser = window.sessionStorage.getItem("user");
+        renderGame();
       });
     </script>
 
