@@ -1,0 +1,16 @@
+.grid-container {
+  max-width: 75%;
+}
+
+.cell {
+  flex: 1; /* Each cell occupies equal space within its row */
+  width: auto;
+  aspect-ratio: 1;
+  border: 1px solid black;
+  background-color: blue;
+  cursor: pointer;
+}
+
+.light-on {
+  background-color: lightblue;
+}

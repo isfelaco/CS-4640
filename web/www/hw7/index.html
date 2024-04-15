@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html lang="en" data-bs-theme="light">
+  <head>
+    <!-- url: https://cs4640.cs.virginia.edu/isf4rjk/hw7/ -->
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="author" content="Bella Felaco, isf4rjk" />
+    <meta name="description" content="Lights Out game" />
+
+    <title>Lights Out</title>
+
+    <link
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css"
+      rel="stylesheet"
+      integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN"
+      crossorigin="anonymous"
+    />
+
+    <link rel="stylesheet" href="main.css" />
+
+    <script
+      src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.1/jquery.js"
+      integrity="sha512-+k1pnlgt4F1H8L7t3z95o3/KO+o78INEcXTbnoJQ/F2VqDVhWoaiVml/OEHv9HsVgxUaVW+IbiZPUJQfF/YxZw=="
+      crossorigin="anonymous"
+      referrerpolicy="no-referrer"
+    ></script>
+
+    <!-- <script>
+      $(document).ready(function () {});
+
+      $.post(
+        "setup.php",
+        { size: "size" }, // data object of POST variables
+        function () {
+          // callback on success
+          console.log("here");
+        }
+      );
+    </script> -->
+
+    <style>
+      .hover {
+        cursor: pointer;
+        text-decoration: underline;
+        color: blue;
+      }
+    </style>
+    <script>
+      function generateGrid(size, lights_on_positions) {
+        const gridContainer = $("#grid-container");
+        gridContainer.empty();
+
+        for (let row = 0; row < size; row++) {
+          const rowDiv = $('<div class="row"></div>');
+
+          for (let col = 0; col < size; col++) {
+            const colDiv = $('<div class="col cell"></div>');
+
+            if (
+              lights_on_positions.some(
+                (position) => position[0] === row && position[1] === col
+              )
+            ) {
+              colDiv.addClass("light-on");
+            }
+
+            rowDiv.append(colDiv);
+          }
+
+          gridContainer.append(rowDiv);
+        }
+      }
+      $(document).ready(function () {
+        $("#setup-form").on("submit", function (event) {
+          event.preventDefault();
+          const form = event.target;
+          const size = form.elements["size-input"].value;
+
+          let lights_on_postitions;
+          $.post(
+            "setup.php",
+            { size: size }, // data object of POST variables
+            function (res) {
+              // callback on success
+              lights_on_postitions = res.lights_on_positions;
+              console.log("Lights-on positions:", res.lights_on_positions);
+
+              // generate the grid
+              generateGrid(size, lights_on_postitions);
+
+              // bind click event handler
+              $(".col.cell").each(function () {
+                $(this).on("click", function () {
+                  if ($(this).hasClass("light-on")) {
+                    $(this).removeClass("light-on");
+                  } else {
+                    $(this).addClass("light-on");
+                  }
+                });
+              });
+            }
+          ).fail(function () {
+            console.error("Failed to retrieve positions");
+          });
+        });
+      });
+    </script>
+  </head>
+
+  <body>
+    <div class="container-fluid">
+      <!-- A form input for the size of the board. This number will be used to create a square board with the same number of rows and columns. -->
+      <!-- A button that allows the user to start the game of the specified size. -->
+      <div class="row">
+        <form id="setup-form">
+          <input type="number" name="size-input" value="10" />
+          <button type="submit" class="btn btn-primary" id="setup-btn">
+            Setup Grid
+          </button>
+        </form>
+      </div>
+
+      <div class="row grid-container" id="grid-container"></div>
+    </div>
+  </body>
+</html>
