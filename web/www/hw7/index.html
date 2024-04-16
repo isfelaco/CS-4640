@@ -29,30 +29,28 @@
   </head>
 
   <body>
-    <div class="container-fluid m-3">
-      <div class="row mb-3">
-        <form id="setup-form">
-          <div class="col mb-3">
-            <label for="size-input" class="form-label">Grid Size</label>
-            <input
-              type="number"
-              name="size-input"
-              value="10"
-              class="form-control"
-            />
-            <span class="form-text"> Must be an integer greater than 0. </span>
-          </div>
-
-          <button type="submit" class="btn btn-primary col" id="setup-btn">
-            Start Game
-          </button>
-        </form>
-
-        <div class="alert alert-success" role="alert" style="display: none">
-          Game Over!
+    <div class="mb-3">
+      <form id="setup-form">
+        <div class="col mb-3">
+          <label for="size-input" class="form-label">Grid Size</label>
+          <input
+            type="number"
+            name="size-input"
+            value="10"
+            class="form-control"
+          />
+          <span class="form-text"> Must be an integer greater than 0. </span>
         </div>
+
+        <button type="submit" class="btn btn-primary col" id="setup-btn">
+          Start Game
+        </button>
+      </form>
+
+      <div class="alert alert-success" role="alert" style="display: none">
+        Game Over!
       </div>
-      <div class="row grid-container" id="grid-container"></div>
     </div>
+    <table class="table grid-container" id="grid-container"></table>
   </body>
 </html>

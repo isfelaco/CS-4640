@@ -3,9 +3,9 @@ function generateGrid(size, lights_on_positions) {
   gridContainer.empty();
 
   for (let row = 0; row < size; row++) {
-    const rowDiv = $('<div class="row"></div>');
+    const rowDiv = $("<tr></tr>");
     for (let col = 0; col < size; col++) {
-      const colDiv = $('<div class="col cell"></div>');
+      const colDiv = $('<td class="cell" scope="col"></td>');
       colDiv.attr("id", row + "-" + col);
       if (
         lights_on_positions.some(
@@ -40,7 +40,7 @@ $(document).ready(function () {
         generateGrid(size, lights_on_postitions);
 
         // bind click event handler
-        $(".col.cell").each(function () {
+        $(".cell").each(function () {
           $(this).on("click", function () {
             // toggle cell
             $(this).toggleClass("light-on");
