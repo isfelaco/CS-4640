@@ -1,7 +1,7 @@
-body {
+.container {
   height: 100vh;
-  display: flex;
-  flex-direction: row;
+  /* display: flex; */
+  /* flex-direction: row; */
   justify-content: center;
   align-items: center;
   gap: 25px;

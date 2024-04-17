@@ -20,6 +20,25 @@ function generateGrid(size, lights_on_positions) {
   }
 }
 
+function cellToggle() {
+  // toggle cell
+  $(this).toggleClass("light-on");
+
+  // toggle adjacent cells
+  var [rowStr, colStr] = $(this).attr("id").split("-");
+  var row = parseInt(rowStr);
+  var col = parseInt(colStr);
+  var adjacentCells = [
+    $(`#${row - 1}-${col}`), // top
+    $(`#${row + 1}-${col}`), // bottom
+    $(`#${row}-${col - 1}`), // left
+    $(`#${row}-${col + 1}`), // right
+  ];
+  adjacentCells.forEach(function (adjCell) {
+    adjCell.toggleClass("light-on");
+  });
+}
+
 $(document).ready(function () {
   $("#setup-form").on("submit", function (event) {
     event.preventDefault();
@@ -42,27 +61,11 @@ $(document).ready(function () {
         // bind click event handler
         $(".cell").each(function () {
           $(this).on("click", function () {
-            // toggle cell
-            $(this).toggleClass("light-on");
-
-            // toggle adjacent cells
-            var [rowStr, colStr] = $(this).attr("id").split("-");
-            var row = parseInt(rowStr);
-            var col = parseInt(colStr);
-            var adjacentCells = [
-              $(`#${row - 1}-${col}`), // top
-              $(`#${row + 1}-${col}`), // bottom
-              $(`#${row}-${col - 1}`), // left
-              $(`#${row}-${col + 1}`), // right
-            ];
-            adjacentCells.forEach(function (adjCell) {
-              adjCell.toggleClass("light-on");
-            });
+            if ($(".light-on").length !== 0) cellToggle.call(this);
 
             // check for game over
-            if ($(".light-on").length === 0) {
+            if ($(".light-on").length === 0)
               $(".alert.alert-success").css("display", "block");
-            }
           });
         });
       }
