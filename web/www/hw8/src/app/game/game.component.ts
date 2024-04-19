@@ -13,8 +13,12 @@ export class GameComponent {
   guessWord(event: Event) {
     event.preventDefault();
 
-    const targetElement = event.target as HTMLFormElement;
-
+    const form = event.target as HTMLFormElement;
+    const guessInput = form.elements.namedItem(
+      'word-input'
+    ) as HTMLInputElement;
+    const guess = guessInput.value;
+    console.log(guess);
     // const guess = targetElement.querySelector('input[name="word-input"]').value;
     // if (guess.value !== '') {
     //   console.log('Input value:', inputElement.value);
