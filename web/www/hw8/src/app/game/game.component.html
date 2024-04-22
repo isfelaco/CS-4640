@@ -1,6 +1,8 @@
 <div class="row">
   <h1>Game</h1>
   <p>Game</p>
+
+  <!-- guess form -->
   <form (submit)="guessWord($event)">
     <div class="mb-3">
       <label for="word-input" class="form-label">Guess a Word</label>
@@ -8,4 +10,18 @@
     </div>
     <button class="btn btn-primary" type="submit">Guess</button>
   </form>
+
+  <!-- prior guesses -->
+  <table class="table">
+    <thead>
+      <tr>
+        <th scope="col">#</th>
+        <th scope="col">Guess</th>
+        <th scope="col">Letters in Word</th>
+        <th scope="col">Letters in Correct Position</th>
+        <th scope="col">Length</th>
+      </tr>
+    </thead>
+    <tbody id="guesses-table"></tbody>
+  </table>
 </div>
