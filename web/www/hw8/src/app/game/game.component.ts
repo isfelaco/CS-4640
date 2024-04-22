@@ -1,9 +1,9 @@
 import { Component } from '@angular/core';
+import { HttpClient } from '@angular/common/http';
 
 @Component({
   selector: 'app-game',
   standalone: true,
-  imports: [],
   templateUrl: './game.component.html',
   styleUrl: './game.component.css',
 })
@@ -11,14 +11,27 @@ export class GameComponent {
   word: string;
   guesses: string[];
 
-  constructor() {
+  constructor(private http: HttpClient) {
+    // console.log('HERE');
     // get word from wordle_api.php
+    // this.fetchWordFromApi();
     this.word = 'hello';
 
     this.guesses = [];
   }
 
-  guessWord(event: Event) {
+  fetchWordFromApi(): void {
+    this.http.post<string>('/api/wordle_api.php', {}).subscribe(
+      (res) => {
+        this.word = res;
+      },
+      (error) => {
+        console.error('Error fetching word from API:', error);
+      }
+    );
+  }
+
+  guessWord(event: Event): void {
     event.preventDefault();
 
     const form = event.target as HTMLFormElement;
@@ -31,6 +44,10 @@ export class GameComponent {
       console.log(guess);
       this.guesses.push(guess);
       this.updateGuesses();
+
+      if (guess.toLowerCase() === this.word) {
+        console.log('Game over! It took you ', this.guesses.length, ' guesses');
+      }
     }
   }
 
@@ -60,7 +77,7 @@ export class GameComponent {
     return { correctLetters, correctPositions };
   }
 
-  updateGuesses() {
+  updateGuesses(): void {
     const guesses: string[] = this.guesses;
     const word: string = this.word;
     const table: HTMLElement | null = document.getElementById('guesses-table');
@@ -92,8 +109,11 @@ export class GameComponent {
       row.appendChild(numCorrect);
 
       var length = document.createElement('td');
-      length.textContent =
-        guess.length > word.length ? 'Too long' : 'Too short';
+      let lengthMessage: string = '';
+      if (guess.length > word.length) lengthMessage = 'Too long';
+      else if (guess.length < word.length) lengthMessage = 'Too short';
+      else lengthMessage = 'Correct length';
+      length.textContent = lengthMessage;
       row.appendChild(length);
 
       table?.appendChild(row);
