@@ -26,6 +26,10 @@
 
     <link rel="stylesheet/less" type="text/css" href="main.less" />
     <script src="https://cdn.jsdelivr.net/npm/less"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.1/jquery.js"
+        integrity="sha512-+k1pnlgt4F1H8L7t3z95o3/KO+o78INEcXTbnoJQ/F2VqDVhWoaiVml/OEHv9HsVgxUaVW+IbiZPUJQfF/YxZw=="
+        crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+    <script src="controller.js"></script>
 
 </head>
 
@@ -44,81 +48,21 @@
         </span>
 
         <!-- listing of apartments -->
-        <div class="list-group list-group-flush" aria-label="list">
-            <?php foreach ($apartments as $apartment): ?>
-                <a href="?command=apartment&name=<?= $apartment['name'] ?>" class="list-group-item list-group-item-action">
-                    <h4>
-                        <?= $apartment['name'] ?>
-                    </h4>
-                    <ul class="list-group list-group-flush">
-                        <li class="list-group-item"><b>Address:</b>
-                            <?= $apartment['address'] ?? 'N/A'; ?>
-                        </li>
-                        <li class="list-group-item"><b>Rent:</b>
-                            <?= $apartment['rent'] ?? 'N/A'; ?>
-                        </li>
-                        <li class="list-group-item"><b>Bedrooms:</b>
-                            <?= $apartment['bedrooms'] ?? 'N/A'; ?>
-                        </li>
-                        <li class="list-group-item"><b>Bathrooms:</b>
-                            <?= $apartment['bathrooms'] ?? 'N/A'; ?>
-                        </li>
-                        <li class="list-group-item"><b>Description:</b>
-                            <?= $apartment['description'] ?? 'N/A'; ?>
-                        </li>
-                    </ul>
-                </a>
-            <?php endforeach; ?>
-        </div>
+        <div class="list-group list-group-flush" aria-label="list" id="apartmentList"></div>
 
-        <!-- will navigate to paginated results of apartments -->
-        <?php if (count($apartments) >= 3): ?>
-            <nav aria-label="pagination">
-                <ul class="pagination justify-content-center">
-                    <?php
-                    $perPage = 3; // Number of items per page
-                    $totalPages = ceil($aptCount / $perPage);
-
-                    $prevDisabled = $page <= 1 ? 'disabled' : '';
-                    $nextDisabled = $page >= $totalPages ? 'disabled' : '';
-                    ?>
-                    <li class="page-item <?= $prevDisabled ?>">
-                        <form method="POST" action="?command=home">
-                            <input type="hidden" name="page" value="<?= ($page - 1) ?>">
-                        </form>
-                        <button class="page-link">Previous</button>
+        <!-- navigate to paginated results of apartments -->
+        <nav aria-label="pagination">
+            <ul class="pagination justify-content-center">
+                <?php
+                $perPage = 3; // Number of items per page
+                $totalPages = ceil($aptCount / $perPage);
+                for ($i = 1; $i <= $totalPages; $i++): ?>
+                    <li class="page-item">
+                        <button class="pagination-button page-link" data-page="<?= $i ?>"><?= $i ?></button>
                     </li>
-                    <?php for ($i = 1; $i <= $totalPages; $i++): ?>
-                        <li class="page-item <?= ($page == $i ? 'active' : '') ?>">
-                            <form method="POST" action="?command=home">
-                                <input type="hidden" name="page" value="<?= $i ?>">
-                            </form>
-                            <button class="page-link">
-                                <?= $i ?>
-                            </button>
-                        </li>
-                    <?php endfor; ?>
-                    <li class="page-item <?= $nextDisabled ?>">
-                        <form method="POST" action="?command=home"><input type="hidden" name="page"
-                                value="<?= ($page + 1) ?>">
-                        </form>
-                        <button class="page-link">Next</button>
-                    </li>
-                </ul>
-            </nav>
-            <script>
-                var pagination = document.getElementsByClassName("pagination")[0];
-                var forms = pagination.getElementsByTagName("form");
-                var buttons = pagination.getElementsByClassName("page-link");
-                for (var i = 0; i < buttons.length; i++) {
-                    (function (index) {
-                        buttons[index].addEventListener("click", function () {
-                            forms[index].submit();
-                        });
-                    })(i);
-                }
-            </script>
-        <?php endif; ?>
+                <?php endfor; ?>
+            </ul>
+        </nav>
     </div>
 </body>
 

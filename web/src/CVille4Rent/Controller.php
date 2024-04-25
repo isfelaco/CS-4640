@@ -71,9 +71,16 @@ class Controller
      */
     public function showHome()
     {
-        $page = isset($_POST['page']) ? $_POST['page'] : 1;
+        $page = isset($_GET['page']) ? $_GET['page'] : 1;
         $apartments = $this->db->getApartmentsPaginated($page);
         $aptCount = count($this->db->getApartments());
+
+        if (isset($_SERVER['HTTP_X_REQUESTED_WITH']) && strtolower($_SERVER['HTTP_X_REQUESTED_WITH']) === 'xmlhttprequest') {
+            header('Content-Type: application/json');
+            echo json_encode($apartments);
+            exit;
+        }
+
         include ("/opt/src/CVille4Rent/templates/home.php");
     }
 

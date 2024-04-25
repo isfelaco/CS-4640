@@ -1,4 +1,13 @@
 $(document).ready(function () {
+  loadApartments(1);
+
+  $(".pagination-button").on("click", function (event) {
+    event.preventDefault();
+
+    var page = $(this).data("page");
+    loadApartments(page);
+  });
+
   var form = document.querySelectorAll(".needs-validation")[0];
 
   function checkValidity(command, callback) {
@@ -23,7 +32,6 @@ $(document).ready(function () {
     event.preventDefault();
 
     var signInButton = document.getElementById("signin-button");
-    // var signUpButton = document.getElementById("signup-button");
 
     var command = "signup";
     if (event.submitter === signInButton) command = "login";
@@ -41,3 +49,45 @@ $(document).ready(function () {
     form.classList.add("was-validated");
   });
 });
+
+function loadApartments(page) {
+  $.get("?command=home&page=" + page, function (res) {
+    displayApartments(res);
+  }).fail(function (xhr, status, error) {
+    console.log("AJAX request failed: ", status, error);
+    console.log(xhr.responseText);
+  });
+}
+
+function displayApartments(apartments) {
+  var apartmentList = $("#apartmentList");
+  apartmentList.empty();
+
+  apartments.forEach(function (apartment) {
+    var apartmentItem = `
+            <a href="?command=apartment&name=${
+              apartment.name
+            }" class="list-group-item list-group-item-action">
+                <h4>${apartment.name}</h4>
+                <ul class="list-group list-group-flush">
+                    <li class="list-group-item"><b>Address:</b> ${
+                      apartment.address || "N/A"
+                    }</li>
+                    <li class="list-group-item"><b>Rent:</b> ${
+                      apartment.rent || "N/A"
+                    }</li>
+                    <li class="list-group-item"><b>Bedrooms:</b> ${
+                      apartment.bedrooms || "N/A"
+                    }</li>
+                    <li class="list-group-item"><b>Bathrooms:</b> ${
+                      apartment.bathrooms || "N/A"
+                    }</li>
+                    <li class="list-group-item"><b>Description:</b> ${
+                      apartment.description || "N/A"
+                    }</li>
+                </ul>
+            </a>
+        `;
+    apartmentList.append(apartmentItem);
+  });
+}
