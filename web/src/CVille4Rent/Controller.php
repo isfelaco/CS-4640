@@ -59,6 +59,9 @@ class Controller
             case "favorite":
                 $this->favorite();
                 break;
+            case "rate":
+                $this->submitRating();
+                break;
             default:
                 $this->showNotFound();
                 break;
@@ -196,14 +199,34 @@ class Controller
 
     public function favorite()
     {
-        $favorite = $_POST['favorite'];
         $apartment_name = $_POST['apartment_name'];
-        if ($favorite)
+
+        $action = "favorite";
+        $favoritedApartments = $this->db->getFavoritedApartments($_SESSION['user']);
+        foreach ($favoritedApartments as $favApartment) {
+            if ($favApartment['name'] == $apartment_name) {
+                $action = "un-favorite";
+                break;
+            }
+        }
+
+        if ($action !== "favorite")
             $this->db->unfavoriteApartment($_SESSION['user'], $apartment_name);
         else
             $this->db->favoriteApartment($_SESSION['user'], $apartment_name);
-        $prevUrl = $_SERVER['HTTP_REFERER'];
-        header("Location: $prevUrl");
+        header('Content-Type: application/json');
+        echo json_encode($action);
     }
 
+    /**
+     * Insert a rating into the database
+     */
+    public function submitRating()
+    {
+        $rating = $_POST["rating"];
+        $res = $this->db->insertRating($rating);
+
+        header('Content-Type: application/json');
+        echo json_encode($res);
+    }
 }

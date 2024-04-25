@@ -22,6 +22,10 @@
 
   <link rel="stylesheet/less" type="text/css" href="main.less" />
   <script src="https://cdn.jsdelivr.net/npm/less"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.1/jquery.js"
+    integrity="sha512-+k1pnlgt4F1H8L7t3z95o3/KO+o78INEcXTbnoJQ/F2VqDVhWoaiVml/OEHv9HsVgxUaVW+IbiZPUJQfF/YxZw=="
+    crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+  <script src="controller.js"></script>
 </head>
 
 <body>
@@ -44,17 +48,20 @@
   </h1>
 
   <div class="base-container">
-    <form id="favorite-form" method="post" action="?command=favorite">
-      <?php if (isset($_SESSION['user'])): ?>
-        <button type="submit" id="heart-icon" class="btn btn-light">
-          <?= $isApartmentFavorited ? "Un-Favorite Apartment" : 'Favorite Apartment'; ?> <i
-            class="bi <?= $isApartmentFavorited ? 'bi-heart-fill' : 'bi-heart'; ?>"></i>
+    <!-- favorite form -->
+    <?php if (isset($_SESSION['user'])): ?>
+      <form id="favorite-form" onsubmit="favoriteApartment(event)">
+        <button type="submit" id="favorite-btn" class="btn btn-light">
+          <?= $isApartmentFavorited ? "Un-Favorite Apartment" : 'Favorite Apartment'; ?>
+          <i id="heart-icon" class="bi <?= $isApartmentFavorited ? 'bi-heart-fill' : 'bi-heart'; ?>"></i>
         </button>
-      <?php endif; ?>
-      <input type="hidden" name="apartment_name" value="<?= $apartment['name'] ?>">
-      <input type="hidden" name="favorite" value="<?= $isApartmentFavorited ?>">
-    </form>
+        <input type="hidden" name="apartment_name" value="<?= $apartment['name'] ?>">
+        <input type="hidden" name="action" value="<?= $isApartmentFavorited ?>">
+      </form>
+    <?php endif; ?>
 
+
+    <!-- apartment info -->
     <div class="list-group" aria-label="list">
       <div class="list-group-item">
         <ul class="list-group list-group-flush">
@@ -77,15 +84,17 @@
       </div>
     </div>
 
+    <!-- apartment ratings -->
     <section>
       <h2>Ratings</h2>
-      <div class="list-group" aria-label="list">
-        <?php foreach ($ratings as $rating): ?>
-          <div class="list-group-item">
-            <h4>
-              <?= $rating['title'] ?>
-            </h4>
-            <ul class="list-group list-group-flush">
+      <div id="carousel" class="carousel carousel-dark slide" data-bs-ride="carousel">
+        <div class="carousel-inner">
+          <?php foreach ($ratings as $index => $rating): ?>
+            <div class="carousel-item <?= $index === 0 ? 'active' : '' ?>"">
+              <h4>
+                <?= $rating['title'] ?>
+              </h4>
+              <ul class=" list-group list-group-flush">
               <li class="list-group-item"><b>Apartment Name: </b>
                 <?= $rating["apartment_name"] ?>
               </li>
@@ -98,11 +107,57 @@
               <li class="list-group-item"><b>Comment: </b>
                 <?= $rating["comment"] ?>
               </li>
-            </ul>
-          </div>
-        <?php endforeach; ?>
+              </ul>
+            </div>
+          <?php endforeach; ?>
+        </div>
+        <button class="carousel-control-next" type="button" data-bs-target="#carousel" data-bs-slide="next">
+          <span class="carousel-control-next-icon" aria-hidden="true"></span>
+          <span class="visually-hidden">Next</span>
+        </button>
+        <button class="carousel-control-prev" type="button" data-bs-target="#carousel" data-bs-slide="prev">
+          <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+          <span class="visually-hidden">Previous</span>
+        </button>
       </div>
+
+      <!-- submit a rating -->
+      <?php if (isset($_SESSION['user'])): ?>
+        <div id="rating-alert" class="alert alert-danger" role="alert" style="display: none">
+          Unable to Submit Rating
+        </div>
+
+        <form id="ratings-form" onsubmit="submitRating(event)">
+          <div class="mb-3">
+            <label for="title" class="form-label">Rating Title</label>
+            <input type="text" name="title" placeholder="<?= $apartment["name"] ?> Rating" class="form-control me-2" />
+          </div>
+
+          <div class="mb-3">
+            <label for="rent" class="form-label">Rent Paid</label>
+            <input type="number" name="rent" class="form-control" />
+          </div>
+
+          <div class="mb-3">
+            <label for="rating" class="form-label">Rating</label>
+            <input type="range" name="rating" class="form-range" id="rating-range" min="0" max="5">
+          </div>
+
+
+          <div class="mb-3">
+            <textarea class="form-control" name="comment" placeholder="Comment"></textarea>
+          </div>
+
+          <input type="hidden" name="apartment-name" value="<?= $apartment["name"] ?>" />
+          <input type="hidden" name="user" value="<?= $_SESSION["user"] ?>" />
+
+          <button type="submit" class="btn btn-primary">Submit Rating</button>
+        </form>
+      <?php endif; ?>
     </section>
+
+
+
   </div>
 </body>
 

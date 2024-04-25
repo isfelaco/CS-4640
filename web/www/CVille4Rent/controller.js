@@ -103,10 +103,11 @@ function displayApartments(apartments) {
   }
 }
 
+// search for an apartment
 function searchApartment(event) {
   event.preventDefault();
 
-  var formData = new FormData(document.getElementById("search-form"));
+  var formData = new FormData(event.target);
   const search = formData.get("search");
 
   if (search !== "") {
@@ -117,4 +118,60 @@ function searchApartment(event) {
       console.log(xhr.responseText);
     });
   } else loadApartments(1);
+}
+
+// submit a rating
+function submitRating(event) {
+  event.preventDefault();
+
+  var formData = new FormData(event.target);
+  const rating = {
+    user_email: formData.get("user"),
+    title: formData.get("title"),
+    apartment_name: formData.get("apartment-name"),
+    rent: formData.get("rent"),
+    rate: formData.get("rating"),
+    comment: formData.get("comment"),
+  };
+
+  $.post("?command=rate", { rating: rating }, (res) => {
+    console.log(res);
+    $("#rating-alert").css("display", "none");
+  }).fail(function (xhr, status, error) {
+    console.log("AJAX request failed: ", status, error);
+    console.log(xhr.responseText);
+    $("#rating-alert").css("display", "block");
+  });
+}
+
+// favorite or un-favorite an apartment
+function favoriteApartment(event) {
+  event.preventDefault();
+
+  var formData = new FormData(event.target);
+
+  $.post(
+    "?command=favorite",
+    {
+      apartment_name: formData.get("apartment_name"),
+    },
+    (res) => {
+      var heartIcon = $("<i>", {
+        id: "heart-icon",
+        class: "bi bi-heart",
+      });
+      var favBtn = $("#favorite-btn");
+      if (res !== "favorite") {
+        $("#heart-icon").css("class", "bi bi-heart");
+        $("#favorite-btn").text("Favorite Apartment");
+      } else {
+        $("#heart-icon").css("class", "bi bi-heart-fill");
+        $("#favorite-btn").text("Un-Favorite Apartment");
+      }
+      favBtn.append(heartIcon);
+    }
+  ).fail(function (xhr, status, error) {
+    console.log("AJAX request failed: ", status, error);
+    console.log(xhr.responseText);
+  });
 }
