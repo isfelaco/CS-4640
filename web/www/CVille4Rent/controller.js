@@ -1,7 +1,7 @@
 $(document).ready(function () {
   // load apartments and pagination
   loadApartments(1);
-  $(".pagination-button").on("click", (event) => {
+  $(".pagination-button").on("click", function (event) {
     event.preventDefault();
 
     var page = $(this).data("page");
