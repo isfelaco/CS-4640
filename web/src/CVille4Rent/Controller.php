@@ -184,11 +184,14 @@ class Controller
      */
     public function search()
     {
-        if (isset($_POST['search']) && !empty($_POST['search'])) {
-            $apartments = $this->db->getApartment($_POST['search']);
-            include ("/opt/src/CVille4Rent/templates/home.php");
-        } else
-            header("Location: ?command=home");
+        if (isset($_SERVER['HTTP_X_REQUESTED_WITH']) && strtolower($_SERVER['HTTP_X_REQUESTED_WITH']) === 'xmlhttprequest') {
+            $apartments = $this->db->getApartment($_GET['search']);
+            header('Content-Type: application/json');
+            echo json_encode($apartments);
+            exit;
+        }
+
+        include ("/opt/src/CVille4Rent/templates/home.php");
     }
 
     public function favorite()

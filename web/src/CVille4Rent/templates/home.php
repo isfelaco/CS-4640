@@ -41,7 +41,7 @@
         <!-- instructions and search bar -->
         <span>
             <i>Click an apartment to view more information or Search by name</i>
-            <form class="d-flex" role="search" method="POST" action="?command=search">
+            <form class="d-flex" role="search" onsubmit="searchApartment(event)" id="search-form">
                 <input class="form-control me-2" name="search" type="search" placeholder="Search" aria-label="Search">
                 <button class="btn btn-secondary" type="submit">Search</button>
             </form>
@@ -49,7 +49,9 @@
 
         <!-- listing of apartments -->
         <div class="list-group list-group-flush" aria-label="list" id="apartmentList"></div>
-
+        <div class="alert alert-light" role="alert" style="display: none" id="alert">
+            No apartments to show!
+        </div>
         <!-- navigate to paginated results of apartments -->
         <nav aria-label="pagination">
             <ul class="pagination justify-content-center">

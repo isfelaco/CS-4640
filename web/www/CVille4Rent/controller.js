@@ -66,8 +66,12 @@ function displayApartments(apartments) {
   var apartmentList = $("#apartmentList");
   apartmentList.empty();
 
-  apartments.forEach((apartment) => {
-    var apartmentItem = `
+  if (apartments.length > 0) {
+    $("#alert").css("display", "none");
+    $("#apartmentList").css("display", "block");
+
+    apartments.forEach((apartment) => {
+      var apartmentItem = `
             <a href="?command=apartment&name=${
               apartment.name
             }" class="list-group-item list-group-item-action">
@@ -91,6 +95,26 @@ function displayApartments(apartments) {
                 </ul>
             </a>
         `;
-    apartmentList.append(apartmentItem);
-  });
+      apartmentList.append(apartmentItem);
+    });
+  } else {
+    $("#alert").css("display", "block");
+    $("#apartmentList").css("display", "none");
+  }
+}
+
+function searchApartment(event) {
+  event.preventDefault();
+
+  var formData = new FormData(document.getElementById("search-form"));
+  const search = formData.get("search");
+
+  if (search !== "") {
+    $.get("?command=search&search=" + search, (res) => {
+      displayApartments(res);
+    }).fail(function (xhr, status, error) {
+      console.log("AJAX request failed: ", status, error);
+      console.log(xhr.responseText);
+    });
+  } else loadApartments(1);
 }
