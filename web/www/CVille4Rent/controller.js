@@ -3,19 +3,17 @@ $(document).ready(function () {
 
   function checkValidity(command, callback) {
     var formData = new FormData(document.getElementById("login-form"));
-    const email = formData.get("email");
-    const password = formData.get("password");
+    const user = {
+      email: formData.get("email"),
+      password: formData.get("password"),
+    };
 
-    $.post(
-      "?command=" + command,
-      { email: email, password: password },
-      function (res) {
-        console.log(res);
-        if (res && res.message) {
-          callback(res.message);
-        }
+    $.post("?command=" + command, { user: user }, function (res) {
+      console.log(res);
+      if (res && res.message) {
+        callback(res.message);
       }
-    ).fail(function (xhr, status, error) {
+    }).fail(function (xhr, status, error) {
       console.log("AJAX request failed: ", status, error);
       console.log(xhr.responseText);
     });
@@ -29,8 +27,6 @@ $(document).ready(function () {
 
     var command = "signup";
     if (event.submitter === signInButton) command = "login";
-
-    console.log(command);
 
     if (!form.checkValidity()) event.stopPropagation();
 

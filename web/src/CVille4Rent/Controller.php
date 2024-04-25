@@ -111,14 +111,14 @@ class Controller
      */
     public function loginDatabase()
     {
-        $res = $this->db->query("SELECT * from users where email = $1;", $_POST["email"]);
+        $res = $this->db->query("SELECT * from users where email = $1;", $_POST["user"]["email"]);
 
         $message = '';
         if (empty($res))
             $message = "No user with email found";
         else {
             // User was in the database, verify password is correct
-            if (password_verify($_POST["password"], $res[0]["password"])) {
+            if (password_verify($_POST["user"]["password"], $res[0]["password"])) {
                 // Password was correct, save their information to the
                 $_SESSION["user"] = $res[0]["email"];
                 $message = "success";
