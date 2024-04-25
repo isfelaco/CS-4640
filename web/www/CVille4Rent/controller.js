@@ -1,13 +1,14 @@
 $(document).ready(function () {
+  // load apartments and pagination
   loadApartments(1);
-
-  $(".pagination-button").on("click", function (event) {
+  $(".pagination-button").on("click", (event) => {
     event.preventDefault();
 
     var page = $(this).data("page");
     loadApartments(page);
   });
 
+  // control the login form
   var form = document.querySelectorAll(".needs-validation")[0];
 
   function checkValidity(command, callback) {
@@ -17,18 +18,18 @@ $(document).ready(function () {
       password: formData.get("password"),
     };
 
-    $.post("?command=" + command, { user: user }, function (res) {
-      console.log(res);
+    $.post("?command=" + command, { user: user }, (res) => {
       if (res && res.message) {
+        console.log(res);
         callback(res.message);
       }
-    }).fail(function (xhr, status, error) {
+    }).fail((xhr, status, error) => {
       console.log("AJAX request failed: ", status, error);
       console.log(xhr.responseText);
     });
   }
 
-  form.addEventListener("submit", function (event) {
+  form.addEventListener("submit", (event) => {
     event.preventDefault();
 
     var signInButton = document.getElementById("signin-button");
@@ -38,7 +39,7 @@ $(document).ready(function () {
 
     if (!form.checkValidity()) event.stopPropagation();
 
-    checkValidity(command, function (status) {
+    checkValidity(command, (status) => {
       if (status !== "success") {
         var errorMsg = document.getElementById("error-message");
         errorMsg.style.display = "block";
@@ -50,8 +51,9 @@ $(document).ready(function () {
   });
 });
 
+// make an async request to the backend to get the apartments
 function loadApartments(page) {
-  $.get("?command=home&page=" + page, function (res) {
+  $.get("?command=home&page=" + page, (res) => {
     displayApartments(res);
   }).fail(function (xhr, status, error) {
     console.log("AJAX request failed: ", status, error);
@@ -59,11 +61,12 @@ function loadApartments(page) {
   });
 }
 
+// render the apartments in the DOM
 function displayApartments(apartments) {
   var apartmentList = $("#apartmentList");
   apartmentList.empty();
 
-  apartments.forEach(function (apartment) {
+  apartments.forEach((apartment) => {
     var apartmentItem = `
             <a href="?command=apartment&name=${
               apartment.name
