@@ -29,7 +29,9 @@
 </head>
 
 <body>
-  <?php include '/opt/src/CVille4Rent/components/navbar.php'; ?>
+  <!-- <?php include '/opt/src/CVille4Rent/components/navbar.php'; ?> -->
+  <?php include '/students/isf4rjk/students/isf4rjk/private_html/CVille4Rent/components/navbar.php'; ?>
+
 
   <?php
   if (isset($_SESSION['user'])) {

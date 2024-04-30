@@ -34,7 +34,8 @@
 </head>
 
 <body>
-    <?php include '/opt/src/CVille4Rent/components/navbar.php'; ?>
+    <!-- <?php include '/opt/src/CVille4Rent/components/navbar.php'; ?> -->
+    <?php include '/students/isf4rjk/students/isf4rjk/private_html/CVille4Rent/components/navbar.php'; ?>
 
     <h1>CVille 4 Rent</h1>
     <div class="base-container">

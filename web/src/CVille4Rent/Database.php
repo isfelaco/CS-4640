@@ -49,7 +49,8 @@ class Database
         $result = $this->query($queryCheckEmpty);
 
         if ($result[0]['count'] == 0) {
-            $this->insertApartmentDataFromJson('/opt/src/CVille4Rent/data/apartments.json');
+            // $this->insertApartmentDataFromJson('/opt/src/CVille4Rent/data/apartments.json');
+            $this->insertApartmentDataFromJson('/students/isf4rjk/students/isf4rjk/private_html/CVille4Rent/data/apartments.json');
         }
 
         // insert data from JSON file into ratings table
@@ -57,7 +58,8 @@ class Database
         $result = $this->query($queryCheckEmpty);
 
         if ($result[0]['count'] == 0) {
-            $this->insertRatingsDataFromJson('/opt/src/CVille4Rent/data/ratings.json');
+            // $this->insertRatingsDataFromJson('/opt/src/CVille4Rent/data/ratings.json');
+            $this->insertApartmentDataFromJson('/students/isf4rjk/students/isf4rjk/private_html/CVille4Rent/data/ratings.json');
         }
 
         // insert data from JSON file into favorited_apartments table
@@ -65,7 +67,8 @@ class Database
         $result = $this->query($queryCheckEmpty);
 
         if ($result[0]['count'] == 0) {
-            $this->insertFavoritedApartmentsDataFromJson('/opt/src/CVille4Rent/data/favorited_apartments.json');
+            // $this->insertFavoritedApartmentsDataFromJson('/opt/src/CVille4Rent/data/favorited_apartments.json');
+            $this->insertApartmentDataFromJson('/students/isf4rjk/students/isf4rjk/private_html/CVille4Rent/data/favorited_apartments.json');
         }
     }
 

@@ -11,12 +11,23 @@
  */
 
 
-class Config {
+// class Config {
+//     public static $db = [
+//         "host" => "db",
+//         "port" => 5432,
+//         "user" => "localuser",
+//         "pass" => "cs4640LocalUser!",
+//         "database" => "example"
+//     ];
+// }
+
+class Config
+{
     public static $db = [
-        "host" => "db",
+        "host" => "localhost",
         "port" => 5432,
-        "user" => "localuser",
-        "pass" => "cs4640LocalUser!",
-        "database" => "example"
+        "user" => "isf4rjk",
+        "pass" => "t08fSh0Eq-Pt",
+        "database" => "isf4rjk"
     ];
 }

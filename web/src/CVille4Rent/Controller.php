@@ -84,7 +84,9 @@ class Controller
             exit;
         }
 
-        include ("/opt/src/CVille4Rent/templates/home.php");
+        // include ("/opt/src/CVille4Rent/templates/home.php");
+        include ("/students/isf4rjk/students/isf4rjk/private_html/CVille4Rent/templates/home.php");
+
     }
 
 
@@ -96,7 +98,9 @@ class Controller
         $apartmentName = isset($this->input["name"]) ? $this->input["name"] : "";
         $apartment = $this->db->getApartment($apartmentName)[0];
         $ratings = $this->db->getRatings($apartmentName);
-        include "/opt/src/CVille4Rent/templates/apartment.php";
+
+        // include "/opt/src/CVille4Rent/templates/apartment.php";
+        include ("/students/isf4rjk/students/isf4rjk/private_html/CVille4Rent/templates/apartment.php");
     }
 
     /**
@@ -105,7 +109,9 @@ class Controller
     public function showProfile()
     {
         $user = isset($_SESSION["user"]) ? $_SESSION["user"] : "";
-        include "/opt/src/CVille4Rent/templates/profile.php";
+
+        // include "/opt/src/CVille4Rent/templates/profile.php";
+        include ("/students/isf4rjk/students/isf4rjk/private_html/CVille4Rent/templates/profile.php");
     }
 
     /**
@@ -170,7 +176,10 @@ class Controller
     public function showFavorites()
     {
         $apartments = $this->db->getFavoritedApartments($_SESSION["user"]);
-        include "/opt/src/CVille4Rent/templates/favorites.php";
+
+        // include "/opt/src/CVille4Rent/templates/favorites.php";
+        include ("/students/isf4rjk/students/isf4rjk/private_html/CVille4Rent/templates/favorites.php");
+
     }
 
     /**
@@ -179,7 +188,9 @@ class Controller
     public function showRatings()
     {
         $ratings = $this->db->getUserRatings($_SESSION["user"]);
-        include "/opt/src/CVille4Rent/templates/ratings.php";
+
+        // include "/opt/src/CVille4Rent/templates/ratings.php";
+        include ("/students/isf4rjk/students/isf4rjk/private_html/CVille4Rent/templates/ratings.php");
     }
 
     /**
@@ -194,7 +205,9 @@ class Controller
             exit;
         }
 
-        include ("/opt/src/CVille4Rent/templates/home.php");
+        // include ("/opt/src/CVille4Rent/templates/home.php");
+        include ("/students/isf4rjk/students/isf4rjk/private_html/CVille4Rent/templates/home.php");
+
     }
 
     public function favorite()
