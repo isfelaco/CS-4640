@@ -38,6 +38,9 @@ class Controller
             case "login":
                 $this->loginDatabase();
                 break;
+            case "signup":
+                $this->createUser();
+                break;
             case "logout":
                 $this->logout();
                 break;
@@ -56,6 +59,9 @@ class Controller
             case "favorite":
                 $this->favorite();
                 break;
+            case "rate":
+                $this->submitRating();
+                break;
             default:
                 $this->showNotFound();
                 break;
@@ -68,10 +74,19 @@ class Controller
      */
     public function showHome()
     {
-        $page = isset($_POST['page']) ? $_POST['page'] : 1;
+        $page = isset($_GET['page']) ? $_GET['page'] : 1;
         $apartments = $this->db->getApartmentsPaginated($page);
         $aptCount = count($this->db->getApartments());
-        include ("/opt/src/CVille4Rent/templates/home.php");
+
+        if (isset($_SERVER['HTTP_X_REQUESTED_WITH']) && strtolower($_SERVER['HTTP_X_REQUESTED_WITH']) === 'xmlhttprequest') {
+            header('Content-Type: application/json');
+            echo json_encode($apartments);
+            exit;
+        }
+
+        // include ("/opt/src/CVille4Rent/templates/home.php");
+        include ("/students/isf4rjk/students/isf4rjk/private_html/CVille4Rent/templates/home.php");
+
     }
 
 
@@ -83,7 +98,9 @@ class Controller
         $apartmentName = isset($this->input["name"]) ? $this->input["name"] : "";
         $apartment = $this->db->getApartment($apartmentName)[0];
         $ratings = $this->db->getRatings($apartmentName);
-        include "/opt/src/CVille4Rent/templates/apartment.php";
+
+        // include "/opt/src/CVille4Rent/templates/apartment.php";
+        include ("/students/isf4rjk/students/isf4rjk/private_html/CVille4Rent/templates/apartment.php");
     }
 
     /**
@@ -92,7 +109,9 @@ class Controller
     public function showProfile()
     {
         $user = isset($_SESSION["user"]) ? $_SESSION["user"] : "";
-        include "/opt/src/CVille4Rent/templates/profile.php";
+
+        // include "/opt/src/CVille4Rent/templates/profile.php";
+        include ("/students/isf4rjk/students/isf4rjk/private_html/CVille4Rent/templates/profile.php");
     }
 
     /**
@@ -103,41 +122,45 @@ class Controller
         echo "404 Not Found";
     }
 
+    /**
+     * Login my checking for user in database and comparing password
+     */
     public function loginDatabase()
     {
-        // non-empty fields handled before form submit
-        // Check if user is in database, by email
-        $res = $this->db->query("SELECT * from users where email = $1;", $_POST["email"]);
-        if (empty($res)) {
-            // User was not there (empty result), so insert them
-            // $this->db->query(
-            //     "INSERT INTO users (name, email, password, score) values ($1, $2);",
-            //     $_POST["email"],
-            //     // Use the hashed password!
-            //     password_hash($_POST["password"], PASSWORD_DEFAULT)
-            // );
-            // $_SESSION["user"] = $_POST["email"];
-            // $message = "New user created";
-            // header("Location: ?command=profile&message=" . urlencode($message));
-            // header("Location: ?command=profile");
+        $res = $this->db->query("SELECT * from users where email = $1;", $_POST["user"]["email"]);
 
-            echo "No user with email found";
-        } else {
+        $message = '';
+        if (empty($res))
+            $message = "No user with email found";
+        else {
             // User was in the database, verify password is correct
-            // Note: Since we used a 1-way hash, we must use password_verify()
-            // to check that the passwords match.
-            if (password_verify($_POST["password"], $res[0]["password"])) {
+            if (password_verify($_POST["user"]["password"], $res[0]["password"])) {
                 // Password was correct, save their information to the
-                // session and send them to the question page
                 $_SESSION["user"] = $res[0]["email"];
-                echo "success";
+                $message = "success";
             } else {
-                // Password was incorrect
-                $_SESSION['message'] = "Incorrect password.";
-                echo "Incorrect password";
-                // header("Location: ?command=home");
+                // password was incorrect
+                $message = "Incorrect Password";
             }
         }
+        header("Content-Type: application/json");
+        echo json_encode(array("message" => $message));
+    }
+
+    /**
+     * Create a user in the database
+     */
+    public function createUser()
+    {
+        $this->db->query(
+            "INSERT INTO users (email, password) values ($1, $2);",
+            $_POST["email"],
+            password_hash($_POST["password"], PASSWORD_DEFAULT)
+        );
+        $_SESSION["user"] = $_POST["email"];
+        $message = "New user created";
+        header("Content-Type: application/json");
+        echo json_encode(array("message" => $message));
     }
 
     public function logout()
@@ -153,7 +176,10 @@ class Controller
     public function showFavorites()
     {
         $apartments = $this->db->getFavoritedApartments($_SESSION["user"]);
-        include "/opt/src/CVille4Rent/templates/favorites.php";
+
+        // include "/opt/src/CVille4Rent/templates/favorites.php";
+        include ("/students/isf4rjk/students/isf4rjk/private_html/CVille4Rent/templates/favorites.php");
+
     }
 
     /**
@@ -162,7 +188,9 @@ class Controller
     public function showRatings()
     {
         $ratings = $this->db->getUserRatings($_SESSION["user"]);
-        include "/opt/src/CVille4Rent/templates/ratings.php";
+
+        // include "/opt/src/CVille4Rent/templates/ratings.php";
+        include ("/students/isf4rjk/students/isf4rjk/private_html/CVille4Rent/templates/ratings.php");
     }
 
     /**
@@ -170,23 +198,48 @@ class Controller
      */
     public function search()
     {
-        if (isset($_POST['search']) && !empty($_POST['search'])) {
-            $apartments = $this->db->getApartment($_POST['search']);
-            include ("/opt/src/CVille4Rent/templates/home.php");
-        } else
-            header("Location: ?command=home");
+        if (isset($_SERVER['HTTP_X_REQUESTED_WITH']) && strtolower($_SERVER['HTTP_X_REQUESTED_WITH']) === 'xmlhttprequest') {
+            $apartments = $this->db->getApartment($_GET['search']);
+            header('Content-Type: application/json');
+            echo json_encode($apartments);
+            exit;
+        }
+
+        // include ("/opt/src/CVille4Rent/templates/home.php");
+        include ("/students/isf4rjk/students/isf4rjk/private_html/CVille4Rent/templates/home.php");
+
     }
 
     public function favorite()
     {
-        $favorite = $_POST['favorite'];
         $apartment_name = $_POST['apartment_name'];
-        if ($favorite)
+
+        $action = "favorite";
+        $favoritedApartments = $this->db->getFavoritedApartments($_SESSION['user']);
+        foreach ($favoritedApartments as $favApartment) {
+            if ($favApartment['name'] == $apartment_name) {
+                $action = "un-favorite";
+                break;
+            }
+        }
+
+        if ($action !== "favorite")
             $this->db->unfavoriteApartment($_SESSION['user'], $apartment_name);
         else
             $this->db->favoriteApartment($_SESSION['user'], $apartment_name);
-        $prevUrl = $_SERVER['HTTP_REFERER'];
-        header("Location: $prevUrl");
+        header('Content-Type: application/json');
+        echo json_encode($action);
     }
 
+    /**
+     * Insert a rating into the database
+     */
+    public function submitRating()
+    {
+        $rating = $_POST["rating"];
+        $res = $this->db->insertRating($rating);
+
+        header('Content-Type: application/json');
+        echo json_encode($res);
+    }
 }

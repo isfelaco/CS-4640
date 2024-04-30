@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en" data-bs-theme="light">
+  <head>
+    <!-- url: https://cs4640.cs.virginia.edu/isf4rjk/hw7/ -->
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="author" content="Bella Felaco, isf4rjk" />
+    <meta name="description" content="Lights Out game" />
+
+    <title>Lights Out</title>
+
+    <link
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css"
+      rel="stylesheet"
+      integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN"
+      crossorigin="anonymous"
+    />
+
+    <link rel="stylesheet" href="main.css" />
+
+    <script
+      src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.1/jquery.js"
+      integrity="sha512-+k1pnlgt4F1H8L7t3z95o3/KO+o78INEcXTbnoJQ/F2VqDVhWoaiVml/OEHv9HsVgxUaVW+IbiZPUJQfF/YxZw=="
+      crossorigin="anonymous"
+      referrerpolicy="no-referrer"
+    ></script>
+
+    <script src="lightsout.js"></script>
+  </head>
+
+  <body>
+    <div class="col container m-3">
+      <div class="row">
+        <div class="alert alert-success" role="alert" style="display: none">
+          Game Over!
+        </div>
+      </div>
+      <div class="row">
+        <div class="col mb-3 g-3">
+          <form id="setup-form">
+            <div class="mb-3 g-3">
+              <label for="size-input" class="form-label">Grid Size</label>
+              <input
+                type="number"
+                name="size-input"
+                value="5"
+                class="form-control"
+              />
+              <span class="form-text">
+                Must be an integer greater than 0.
+              </span>
+            </div>
+
+            <button type="submit" class="btn btn-primary col" id="setup-btn">
+              Start Game
+            </button>
+          </form>
+        </div>
+        <table class="table grid-container" id="grid-container"></table>
+      </div>
+    </div>
+  </body>
+</html>

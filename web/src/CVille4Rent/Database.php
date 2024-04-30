@@ -49,7 +49,8 @@ class Database
         $result = $this->query($queryCheckEmpty);
 
         if ($result[0]['count'] == 0) {
-            $this->insertApartmentDataFromJson('/opt/src/CVille4Rent/data/apartments.json');
+            // $this->insertApartmentDataFromJson('/opt/src/CVille4Rent/data/apartments.json');
+            $this->insertApartmentDataFromJson('/students/isf4rjk/students/isf4rjk/private_html/CVille4Rent/data/apartments.json');
         }
 
         // insert data from JSON file into ratings table
@@ -57,7 +58,8 @@ class Database
         $result = $this->query($queryCheckEmpty);
 
         if ($result[0]['count'] == 0) {
-            $this->insertRatingsDataFromJson('/opt/src/CVille4Rent/data/ratings.json');
+            // $this->insertRatingsDataFromJson('/opt/src/CVille4Rent/data/ratings.json');
+            $this->insertApartmentDataFromJson('/students/isf4rjk/students/isf4rjk/private_html/CVille4Rent/data/ratings.json');
         }
 
         // insert data from JSON file into favorited_apartments table
@@ -65,7 +67,8 @@ class Database
         $result = $this->query($queryCheckEmpty);
 
         if ($result[0]['count'] == 0) {
-            $this->insertFavoritedApartmentsDataFromJson('/opt/src/CVille4Rent/data/favorited_apartments.json');
+            // $this->insertFavoritedApartmentsDataFromJson('/opt/src/CVille4Rent/data/favorited_apartments.json');
+            $this->insertApartmentDataFromJson('/students/isf4rjk/students/isf4rjk/private_html/CVille4Rent/data/favorited_apartments.json');
         }
     }
 
@@ -298,7 +301,8 @@ class Database
     public function favoriteApartment($user_email, $apartment_name)
     {
         $query = "INSERT INTO favorited_apartments(user_email, apartment_name) VALUES ($1, $2)";
-        $this->query($query, $user_email, $apartment_name);
+        $res = $this->query($query, $user_email, $apartment_name);
+        return $res;
     }
 
     /**
@@ -307,6 +311,17 @@ class Database
     public function unfavoriteApartment($user_email, $apartment_name)
     {
         $query = "DELETE FROM favorited_apartments WHERE user_email = $1 AND apartment_name = $2";
-        $this->query($query, $user_email, $apartment_name);
+        $res = $this->query($query, $user_email, $apartment_name);
+        return $res;
+    }
+
+    /**
+     * Insert a rating
+     */
+    public function insertRating($rating)
+    {
+        $query = "INSERT INTO ratings(user_email, title, apartment_name, rent_paid, rating, comment) VALUES ($1, $2, $3, $4, $5, $6)";
+        $res = $this->query($query, $rating["user_email"], $rating["title"], $rating["apartment_name"], $rating["rent"], $rating["rating"], $rating["comment"]);
+        return $res;
     }
 }

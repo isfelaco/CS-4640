@@ -9,7 +9,6 @@
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"
     integrity="sha384-C6RzsynM9kWDrMNeT87bh95OGNyZPhcTNXj1NW7RuBCsyN/o0jlpcV8Qyq46cDfL"
     crossorigin="anonymous"></script>
-  <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
 </head>
 
 <body>
@@ -24,14 +23,14 @@
       <div class="collapse navbar-collapse" id="navbarNav">
         <div class="navbar-nav me-auto mb-2 mb-lg-0">
           <?php if (empty($_SESSION["user"])): ?>
-            <button class="nav-link" data-bs-toggle="modal" data-bs-target="#modal">Login
+            <button class="nav-link" data-bs-toggle="modal" data-bs-target="#modal">Sign In
             </button>
           <?php else: ?>
             <a class="nav-link" href="?command=profile">
               Profile
             </a>
             <a class="nav-link" href="?command=logout">
-              Logout
+              Sign Out
             </a>
           <?php endif; ?>
         </div>
@@ -80,9 +79,14 @@
               </div>
 
               <!-- login button - will submit form and authenticate user -->
-              <button id="login-button" class="btn btn-primary" type="submit" name="login-submit">
-                Login
-              </button>
+              <div class="btn-group" role="group">
+                <button id="signin-button" class="btn btn-primary" type="submit" name="login-submit">
+                  Sign In
+                </button>
+                <button id="signup-button" class="btn btn-success" type="submit" name="login-submit">
+                  Sign Up
+                </button>
+              </div>
             </form>
           </div>
         </div>
@@ -93,55 +97,10 @@
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"
     integrity="sha384-C6RzsynM9kWDrMNeT87bh95OGNyZPhcTNXj1NW7RuBCsyN/o0jlpcV8Qyq46cDfL"
     crossorigin="anonymous"></script>
-  <script>
-
-    // Fetch all the forms we want to apply custom Bootstrap validation styles to
-    var form = document.querySelectorAll('.needs-validation')[0];
-
-    function checkValidity(callback) {
-      var formData = new FormData(document.getElementById('login-form'));
-
-      let status;
-      axios.post("?command=login", formData)
-        .then(function (res) {
-          if (res.status >= 200 && res.status < 300) {
-            // Request was successful, handle response
-            console.log(res.data);
-            callback(res.data);
-          } else {
-            // Request failed, handle error
-            console.error('Request failed with status', xhr.status);
-          }
-        })
-        .catch(function (error) {
-          console.error('Network error occurred');
-        })
-      return status;
-    }
-
-    // Loop over them and prevent submission
-    form.addEventListener('submit', function (event) {
-      event.preventDefault();
-
-      // Check form validity using the checkValidity function
-      if (!form.checkValidity()) {
-        // If form is not valid, do not proceed with form submission
-        event.stopPropagation();
-      }
-
-      checkValidity(function (status) {
-        if (status !== "success") {
-          var errorMsg = document.getElementById("error-message");
-          errorMsg.style.display = "block";
-          errorMsg.innerHTML = status;
-        }
-        else form.submit();
-      });
-
-      form.classList.add('was-validated')
-    });
-
-  </script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.1/jquery.js"
+    integrity="sha512-+k1pnlgt4F1H8L7t3z95o3/KO+o78INEcXTbnoJQ/F2VqDVhWoaiVml/OEHv9HsVgxUaVW+IbiZPUJQfF/YxZw=="
+    crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+  <script src="controller.js"></script>
 </body>
 
 </html>

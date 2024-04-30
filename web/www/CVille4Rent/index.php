@@ -9,8 +9,8 @@ ini_set("display_errors", 1);
 // that Apache does not serve publicly.  They will be in /opt/src/, which
 // is our src/ directory in Docker.
 spl_autoload_register(function ($classname) {
-  include "/opt/src/CVille4Rent/$classname.php";
-  // include "./src/$classname.php";
+  // include "/opt/src/CVille4Rent/$classname.php";
+  include "/students/isf4rjk/students/isf4rjk/private_html/CVille4Rent/$classname.php";
 });
 
 // Other global things that we need to do
