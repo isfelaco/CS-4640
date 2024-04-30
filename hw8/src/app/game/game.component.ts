@@ -1,5 +1,9 @@
 import { Component } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
+import {
+  HttpClient,
+  HttpErrorResponse,
+  HttpParams,
+} from '@angular/common/http';
 
 @Component({
   selector: 'app-game',
@@ -12,23 +16,25 @@ export class GameComponent {
   guesses: string[];
 
   constructor(private http: HttpClient) {
-    // console.log('HERE');
     // get word from wordle_api.php
-    // this.fetchWordFromApi();
-    this.word = 'hello';
+    this.word = '';
+    this.fetchWordFromApi();
+    console.log(this.word);
 
     this.guesses = [];
   }
 
   fetchWordFromApi(): void {
-    this.http.post<string>('/api/wordle_api.php', {}).subscribe(
-      (res) => {
-        this.word = res;
-      },
-      (error) => {
-        console.error('Error fetching word from API:', error);
-      }
-    );
+    this.http
+      .get<any>('http://localhost:8080/hw8/wordle_api.php', {})
+      .subscribe(
+        (res) => {
+          this.word = res.word;
+        },
+        (error) => {
+          console.error('Error fetching word from API:', error);
+        }
+      );
   }
 
   guessWord(event: Event): void {
