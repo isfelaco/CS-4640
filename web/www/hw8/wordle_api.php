@@ -1,4 +1,8 @@
 <?php
+header("Access-Control-Allow-Origin: http://localhost:4200");
+header("Access-Control-Allow-Headers: X-Requested-With, Content-Type, Origin, Authorization, Accept, Client-Security-Token, Accept-Encoding");
+header("Access-Control-Max-Age: 1000");
+header("Access-Control-Allow-Methods: POST, GET, OPTIONS, PUT");
 
 // returns a random word from word list & returns as JSON file
 
@@ -9,6 +13,5 @@ $words = file($filePath, FILE_IGNORE_NEW_LINES);
 
 $randomWord = $words[array_rand($words)];
 
-header("Content-Type: application/json");
-$res = json_encode(['word' => $randomWord]);
-echo $res;
+header("Content-Type: text/plain");
+echo $randomWord;

@@ -1,0 +1,59 @@
+<!-- guess form -->
+<div class="row mb-3 justify-content-center">
+  <div class="col">
+    <h6 class="display-5">Welcome to Evil Wordle!</h6>
+    <p>Guess a word and receive feedback below.</p>
+    <button class="btn btn-primary" (click)="newGame()">New Game</button>
+  </div>
+  <div class="col">
+    <form (submit)="guessWord($event)" class="mb-3">
+      <div class="form-floating mb-3">
+        <input class="form-control" type="text" name="word-input" />
+        <label for="word-input" class="form-label">Guess a Word</label>
+      </div>
+      <button class="btn btn-primary" type="submit">Guess</button>
+    </form>
+    <div
+      id="guess-alert"
+      class="alert alert-warning"
+      role="alert"
+      [ngStyle]="{ display: alert ? 'block' : 'none' }"
+    >
+      Invalid Guess
+    </div>
+  </div>
+</div>
+
+<!-- prior guesses -->
+<div *ngIf="guesses.length > 0" class="row justify-content-center">
+  <div class="col">
+    <h6 class="display-6">Guesses</h6>
+    <table class="table table-striped">
+      <thead>
+        <tr>
+          <th scope="col">#</th>
+          <th scope="col">Guess</th>
+          <th scope="col">Letters in Word</th>
+          <th scope="col">Letters in Correct Position</th>
+          <th scope="col">Length</th>
+        </tr>
+      </thead>
+      <tbody id="guesses-table">
+        <tr *ngFor="let guess of guesses; let index = index">
+          <td>{{ index + 1 }}</td>
+          <td>{{ guess.guess }}</td>
+          <td>{{ guess.correctLetters }}</td>
+          <td>{{ guess.correctPositions }}</td>
+          <td
+            [ngClass]="{
+              'text-success': guess.length === 'Correct length',
+              'text-danger': guess.length !== 'Correct length'
+            }"
+          >
+            {{ guess.length }}
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</div>
