@@ -13,8 +13,11 @@ export class ApiService {
   constructor(private http: HttpClient) {}
 
   fetchWord(): Observable<string> {
-    return this.http.get<string>('http://localhost:8080/hw8/wordle_api.php', {
-      responseType: 'text' as 'json',
-    });
+    return this.http.get<string>(
+      'https://cs4640.cs.virginia.edu/isf4rjk/hw8/wordle_api.php',
+      {
+        responseType: 'text' as 'json',
+      }
+    );
   }
 }
